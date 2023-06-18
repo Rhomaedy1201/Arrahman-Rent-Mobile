@@ -50,6 +50,7 @@ class QuotationController extends GetxController {
           ));
         } else {
           SnackbarWidget().snackbarError(response.body['message']);
+          print(response.body);
         }
       });
     } catch (e) {

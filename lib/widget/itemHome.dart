@@ -19,8 +19,6 @@ class ItemHome extends StatelessWidget {
       }
     },
     child: Container(
-      width: 90,
-      height: 90,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Color(0xFFFCFCFC),
@@ -110,7 +108,7 @@ class ItemHome extends StatelessWidget {
       if (connectivityResult == ConnectivityResult.none) {
         print("NO INTERNET");
       } else {
-        Get.to(SearchDataHistory());
+        Get.offAll(SearchDataHistory());
       }
     },
     child: Container(

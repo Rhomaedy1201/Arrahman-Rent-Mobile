@@ -8,6 +8,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:transportation_rent_mobile/controllers/qutationController.dart';
+import 'package:transportation_rent_mobile/utils/base_url.dart';
+import 'package:http/http.dart' as http;
+import 'package:transportation_rent_mobile/utils/convertNumberToLatters.dart';
 
 class InvoicePdf {
   Future<void> printPdf(
@@ -17,11 +20,27 @@ class InvoicePdf {
     String email_company,
     String nama_company,
     int id_customer,
+    String exportedImage,
+    String tanda_penerima_pembayaran,
+    String keterangan,
+    String periode_pembayaran,
+    String metode_pembayaran,
+    String nama_bank,
+    String noRekening,
+    String nama_rekening,
+    String nama_tanda_tangan,
   ) async {
     final pdf = pw.Document();
     final ByteData imageData = await rootBundle.load('assets/logo/logo.png');
     final Uint8List imageBytes = imageData.buffer.asUint8List();
     final image = pw.MemoryImage(imageBytes);
+    print("Byte = $exportedImage");
+
+    // get image from api server
+    final url = '$urlWeb/storage/$exportedImage'; // Replace with your image URL
+    print(url);
+    final response = await http.get(Uri.parse(url));
+    final bytes_ttd = response.bodyBytes;
 
     // number format
     final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
@@ -45,7 +64,7 @@ class InvoicePdf {
     var resultPpn = (11 / 100) * subTotalRp;
 
     // Total
-    var total = subTotalRp + resultPpn;
+    int total = (subTotalRp + resultPpn).toInt();
 
     final header = [
       ['Tanggal digunakan'],
@@ -58,7 +77,7 @@ class InvoicePdf {
     ];
     final ketData = [
       [
-        'Sewa 2 (dua) unit Kendaraan Roda 4 (empat) periode pembayaran bulan Januari 2022',
+        '$keterangan $periode_pembayaran',
         'Rp. ${currencyFormatter.format(double.parse(subTotalRp.toString())).replaceAll('.', ',')}',
       ],
     ];
@@ -169,8 +188,8 @@ class InvoicePdf {
             ),
             child: pw.Padding(
               padding: const pw.EdgeInsets.all(10),
-              child: pw.Text(
-                  "Dua Puluh Juta Seratus Delapan Puluh Lima Ribu Rupiah"),
+              child:
+                  pw.Text("${ConvertNumberToLatters().numberToLetters(total)}"),
             )),
       ],
     );
@@ -382,7 +401,8 @@ class InvoicePdf {
                 child: pw.Padding(
                   padding: const pw.EdgeInsets.symmetric(
                       horizontal: 20, vertical: 20),
-                  child: pw.Text("Telah Terima Dari :"),
+                  child:
+                      pw.Text("Telah Terima Dari : $tanda_penerima_pembayaran"),
                 ),
               ),
               keteranganTableHeader,
@@ -424,6 +444,10 @@ class InvoicePdf {
                                 decoration: pw.BoxDecoration(
                                   border: pw.Border.all(width: 1),
                                 ),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                      metode_pembayaran == "cash" ? "V" : ""),
+                                ),
                               ),
                               pw.SizedBox(width: 10),
                               pw.Text("Cash"),
@@ -438,22 +462,26 @@ class InvoicePdf {
                                 decoration: pw.BoxDecoration(
                                   border: pw.Border.all(width: 1),
                                 ),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                      metode_pembayaran == "cash" ? "" : "V"),
+                                ),
                               ),
                               pw.SizedBox(width: 10),
-                              pw.Text("Transfer melalui............."),
+                              pw.Text("Transfer melalui : $nama_bank"),
                             ],
                           ),
                           pw.SizedBox(height: 5),
                           pw.Container(
                             width: 250,
                             // color: PdfColors.red,
-                            child: pw.Text("No. Rekening : "),
+                            child: pw.Text("No. Rekening : $noRekening"),
                           ),
                           pw.SizedBox(height: 5),
                           pw.Container(
                             width: 250,
                             // color: PdfColors.red,
-                            child: pw.Text("a/n : "),
+                            child: pw.Text("a/n : $nama_rekening"),
                           ),
                         ],
                       ),
@@ -465,7 +493,7 @@ class InvoicePdf {
                     width: 200,
                     // color: PdfColors.red,
                     child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
                         pw.Padding(
                           padding: const pw.EdgeInsets.symmetric(
@@ -480,7 +508,19 @@ class InvoicePdf {
                                 pw.Text("PT Suhul Mabrouk Arrahmah,"),
                               ]),
                         ),
-                        pw.SizedBox(height: 80),
+                        pw.SizedBox(height: 20),
+                        pw.Center(
+                          child: pw.Container(
+                            width: 100,
+                            height: 100,
+                            // color: PdfColors.amber,
+                            child: pw.Image(
+                              pw.MemoryImage(bytes_ttd),
+                            ),
+                          ),
+                        ),
+                        // pw.SizedBox(height: 3),
+                        pw.Text("M. Fadil Jaidi"),
                         pw.Container(
                           width: 230,
                           height: 1,

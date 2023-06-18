@@ -9,6 +9,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List list = [
+    'data 1',
+    'data 2',
+    'data 3',
+    'data 4',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +50,12 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
                 Container(
                   width: double.infinity,
-                  height: 400,
+                  // height: 400,
+                  color: Colors.amber,
                   // color: Colors.amber,
                   child: GridView.count(
                     primary: false,
+                    shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisSpacing: 20,
@@ -59,6 +67,19 @@ class _HomePageState extends State<HomePage> {
                       ItemHome().searchDataQuotation,
                       ItemHome().changeCompany,
                     ],
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                    ),
+                    itemBuilder: (context, index) {
+                      return Container();
+                    },
                   ),
                 ),
               ],

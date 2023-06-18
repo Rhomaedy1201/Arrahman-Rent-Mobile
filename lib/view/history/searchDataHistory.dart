@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
+import 'package:transportation_rent_mobile/view/page/homePage.dart';
 
 class SearchDataHistory extends StatefulWidget {
   const SearchDataHistory({super.key});
@@ -76,6 +77,12 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
         title: const Text(
           "History",
           style: TextStyle(fontSize: 18),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Get.offAll(HomePage());
+          },
+          icon: const Icon(Icons.arrow_back),
         ),
         foregroundColor: const Color(0xFF686868),
         backgroundColor: Colors.white,
@@ -153,6 +160,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                         )
                       : ListView.builder(
                           itemCount: filteredList.length,
+                          reverse: true,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
@@ -169,7 +177,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                   print("NO INTERNET");
                                 } else {
                                   // to Data Transportation
-                                  Get.to(DataTransportationPage(
+                                  Get.offAll(DataTransportationPage(
                                       id_customer: item['id']));
                                   search.text = '';
                                   getCustomer();

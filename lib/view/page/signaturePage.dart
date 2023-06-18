@@ -74,6 +74,8 @@ class _SignaturePageState extends State<SignaturePage> {
                     color: Colors.white,
                   ),
                   child: Signature(
+                    width: double.infinity,
+                    height: 450,
                     controller: _controller,
                     backgroundColor: Colors.transparent,
                   ),

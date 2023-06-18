@@ -480,7 +480,7 @@ class _QuotationPageState extends State<QuotationPage> {
                         prefixStyle:
                             TextStyle(fontSize: 14, color: Colors.black),
                         prefixText: "+62  ",
-                        hintText: '82111222444',
+                        hintText: '[031] 870 4740',
                         hintStyle:
                             TextStyle(color: Color(0xFF8F8F8F), fontSize: 13),
                         focusedBorder: OutlineInputBorder(
