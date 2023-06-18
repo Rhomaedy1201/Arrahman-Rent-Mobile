@@ -4,9 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
-import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class SearchDataHistory extends StatefulWidget {
   const SearchDataHistory({super.key});
@@ -17,6 +17,7 @@ class SearchDataHistory extends StatefulWidget {
 
 class _SearchDataHistoryState extends State<SearchDataHistory> {
   var search = TextEditingController(text: '');
+  String? server;
 
   @override
   void initState() {
@@ -46,9 +47,10 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
         print(response.body);
       }
     } catch (e) {
-      // SnackbarWidget().snackbarError(
-      //     "Server Ada kendala atau mati, silahkan hubungi pihak pengembang");
-      print(e);
+      setState(() {
+        server = e.toString();
+      });
+      print("Server $server");
     }
     // print(dataCustomer['id']);
     setState(() {
@@ -75,14 +77,18 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
           "History",
           style: TextStyle(fontSize: 18),
         ),
-        foregroundColor: Color(0xFF686868),
+        foregroundColor: const Color(0xFF686868),
         backgroundColor: Colors.white,
         centerTitle: false,
         elevation: 1,
       ),
       body: isLoading
           ? Center(
-              child: Text("Loading..."),
+              child: Container(
+                width: 60,
+                height: 60,
+                child: Lottie.asset('assets/lottie/loading.json'),
+              ),
             )
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
@@ -96,7 +102,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                     child: TextField(
                       onChanged: _filterData,
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         prefixStyle:
                             TextStyle(fontSize: 14, color: Colors.black),
@@ -131,139 +137,157 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  ListView.builder(
-                    itemCount: filteredList.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(8),
-                    itemBuilder: (context, index) {
-                      final item = filteredList[index];
-                      return InkWell(
-                        splashColor: Color(0xFF7EECFF),
-                        onTap: () async {
-                          // ceck Interner Connection
-                          final connectivityResult =
-                              await (Connectivity().checkConnectivity());
-                          if (connectivityResult == ConnectivityResult.none) {
-                            print("NO INTERNET");
-                          } else {
-                            // to Data Transportation
-                            Get.to(DataTransportationPage(
-                                id_customer: item['id']));
-                            search.text = '';
-                            getCustomer();
-                          }
-                        },
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 5),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: Container(
-                                width: double.infinity,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFA3E2FD),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(7),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color(0xFFDBDBDB),
-                                      blurRadius: 2,
-                                      offset: Offset(1, 2), // Shadow position
-                                    ),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            item['nama_customer'],
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF353535),
-                                            ),
-                                          ),
-                                          Text(
-                                            item['tanggal'],
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF5E5E5E),
-                                            ),
-                                          ),
-                                          // Container(
-                                          //   width: 15,
-                                          //   height: 65,
-                                          //   decoration: const BoxDecoration(
-                                          //     color: Color(0xFF00A7EF),
-                                          //     borderRadius: BorderRadius.only(
-                                          //       topLeft: Radius.circular(7),
-                                          //       bottomLeft: Radius.circular(2),
-                                          //       bottomRight: Radius.circular(20),
-                                          //     ),
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '${item['nama_perusahaan']}, ${item['kota']}',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xFF5E5E5E),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 1,
-                                        color: Colors.white,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Tanda Tangan",
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF5E5E5E),
-                                            ),
-                                          ),
-                                          Text(
-                                            item['nama_lengkap'],
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF5E5E5E),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                  server != null
+                      ? Column(
+                          children: const [
+                            SizedBox(height: 100),
+                            Text(
+                              "Server Mati",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 5),
                           ],
-                        ),
-                      );
-                    },
-                  )
+                        )
+                      : ListView.builder(
+                          itemCount: filteredList.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(8),
+                          itemBuilder: (context, index) {
+                            final item = filteredList[index];
+                            return InkWell(
+                              splashColor: const Color(0xFF7EECFF),
+                              onTap: () async {
+                                // ceck Interner Connection
+                                final connectivityResult =
+                                    await (Connectivity().checkConnectivity());
+                                if (connectivityResult ==
+                                    ConnectivityResult.none) {
+                                  print("NO INTERNET");
+                                } else {
+                                  // to Data Transportation
+                                  Get.to(DataTransportationPage(
+                                      id_customer: item['id']));
+                                  search.text = '';
+                                  getCustomer();
+                                }
+                              },
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFA3E2FD),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(7),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xFFDBDBDB),
+                                            blurRadius: 2,
+                                            offset:
+                                                Offset(1, 2), // Shadow position
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  item['nama_customer'],
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF353535),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  item['tanggal'],
+                                                  style: const TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF5E5E5E),
+                                                  ),
+                                                ),
+                                                // Container(
+                                                //   width: 15,
+                                                //   height: 65,
+                                                //   decoration: const BoxDecoration(
+                                                //     color: Color(0xFF00A7EF),
+                                                //     borderRadius: BorderRadius.only(
+                                                //       topLeft: Radius.circular(7),
+                                                //       bottomLeft: Radius.circular(2),
+                                                //       bottomRight: Radius.circular(20),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              '${item['nama_perusahaan']}, ${item['kota']}',
+                                              style: const TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF5E5E5E),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Container(
+                                              width: double.infinity,
+                                              height: 1,
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  "Tanda Tangan",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF5E5E5E),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  item['nama_lengkap'],
+                                                  style: const TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF5E5E5E),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                ],
+                              ),
+                            );
+                          },
+                        )
                 ],
               ),
             ),

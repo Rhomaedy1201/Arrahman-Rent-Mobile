@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:http/http.dart' as http;
-import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class QuotationPage extends StatefulWidget {
-  QuotationPage({super.key});
+  const QuotationPage({super.key});
 
   @override
   State<QuotationPage> createState() => _QuotationPageState();
@@ -81,7 +80,7 @@ class _QuotationPageState extends State<QuotationPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Buat Kutipan",
           style: TextStyle(fontSize: 18),
         ),
@@ -91,24 +90,30 @@ class _QuotationPageState extends State<QuotationPage> {
         elevation: 1,
       ),
       body: isLoading
-          ? Center(child: Text("Loading"))
+          ? Center(
+              child: Container(
+                width: 60,
+                height: 60,
+                child: Lottie.asset('assets/lottie/loading.json'),
+              ),
+            )
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
               child: ListView(
                 children: [
                   // Nomor Kutipan
-                  Text(
+                  const Text(
                     "Nomor Kutipan",
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: TextField(
-                      style: TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
-                      decoration: InputDecoration(
+                      style: const TextStyle(color: Color(0xFF616161)),
+                      cursorColor: const Color(0xFF737373),
+                      decoration: const InputDecoration(
                         hintText: 'Contoh. 102301001',
                         hintStyle:
                             TextStyle(color: Color(0xFF8F8F8F), fontSize: 13),
@@ -137,13 +142,13 @@ class _QuotationPageState extends State<QuotationPage> {
                     "Kutipan Sewa",
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         hintText: 'Contoh. Sewa Transportasi',
                         hintStyle:
@@ -178,7 +183,7 @@ class _QuotationPageState extends State<QuotationPage> {
                     height: 50,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         hintText: 'Contoh Ibu Selen',
                         hintStyle:
@@ -213,7 +218,7 @@ class _QuotationPageState extends State<QuotationPage> {
                     // height: 55,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         hintText: 'Contoh ibu.selen@gmail.com',
                         hintStyle:
@@ -249,7 +254,7 @@ class _QuotationPageState extends State<QuotationPage> {
                     height: 50,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         hintText: 'Contoh PT Tanah Jaya',
                         hintStyle:
@@ -284,7 +289,7 @@ class _QuotationPageState extends State<QuotationPage> {
                     height: 50,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         hintText: 'Contoh Surabaya',
                         hintStyle:
@@ -319,7 +324,7 @@ class _QuotationPageState extends State<QuotationPage> {
                     height: 50,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         hintText: 'Contoh Jln. Surabaya kota No.10',
                         hintStyle:
@@ -371,7 +376,7 @@ class _QuotationPageState extends State<QuotationPage> {
                                 child: TextField(
                                   style:
                                       const TextStyle(color: Color(0xFF616161)),
-                                  cursorColor: Color(0xFF737373),
+                                  cursorColor: const Color(0xFF737373),
                                   decoration: const InputDecoration(
                                     hintText: 'Contoh 681234',
                                     hintStyle: TextStyle(
@@ -427,10 +432,10 @@ class _QuotationPageState extends State<QuotationPage> {
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: Color(0xFFE4E4E4),
+                                        color: const Color(0xFFE4E4E4),
                                       ),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(4))),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(4))),
                                   height: 50,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -470,7 +475,7 @@ class _QuotationPageState extends State<QuotationPage> {
                     height: 50,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         prefixStyle:
                             TextStyle(fontSize: 14, color: Colors.black),
@@ -509,7 +514,7 @@ class _QuotationPageState extends State<QuotationPage> {
                     height: 50,
                     child: TextField(
                       style: const TextStyle(color: Color(0xFF616161)),
-                      cursorColor: Color(0xFF737373),
+                      cursorColor: const Color(0xFF737373),
                       decoration: const InputDecoration(
                         prefixStyle:
                             TextStyle(fontSize: 14, color: Colors.black),
@@ -574,7 +579,7 @@ class _QuotationPageState extends State<QuotationPage> {
                         return DropdownMenuItem(
                           child: Text(
                             item['nama_lengkap'],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xFF8F8F8F), fontSize: 13),
                           ),
                           value: item['id'],
@@ -584,7 +589,7 @@ class _QuotationPageState extends State<QuotationPage> {
                   ),
 
                   // Buttom
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   SizedBox(
                     height: 45,
                     child: ElevatedButton(
@@ -617,12 +622,12 @@ class _QuotationPageState extends State<QuotationPage> {
                           }
                         }
                       },
-                      child: Text('Simpan'),
+                      child: const Text('Simpan'),
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(1),
                         overlayColor: MaterialStateProperty.all(Colors.green),
                         backgroundColor:
-                            MaterialStateProperty.all(Color(0xFF3FC633)),
+                            MaterialStateProperty.all(const Color(0xFF3FC633)),
                       ),
                     ),
                   ),

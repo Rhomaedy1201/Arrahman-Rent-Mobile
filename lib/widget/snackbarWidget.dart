@@ -29,4 +29,20 @@ class SnackbarWidget {
       ),
     );
   }
+
+  void snackbar() {
+    // if(){
+
+    // }else{
+    //   if (Get.isSnackbarOpen) {
+    //     Get.closeCurrentSnackbar();
+    //   }
+    // }
+    Get.rawSnackbar(
+      title: "Error",
+      message: "Server Error",
+      icon: const Icon(Icons.error_outline),
+      backgroundColor: Colors.red,
+    );
+  }
 }

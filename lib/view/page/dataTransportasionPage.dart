@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 import 'package:transportation_rent_mobile/pdf/invoicePdf.dart';
 import 'package:transportation_rent_mobile/pdf/quotationPdf.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/page/addTransportationPage.dart';
 import 'package:transportation_rent_mobile/widget/dataQuotation.dart';
-import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class DataTransportationPage extends StatefulWidget {
   int id_customer;
@@ -69,11 +69,8 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
         print(response.body);
       }
     } catch (e) {
-      // SnackbarWidget().snackbarError(
-      //     "Server Ada kendala atau mati, silahkan hubungi pihak pengembang");
       print(e);
     }
-    // print(dataQuotation['id']);
     setState(() {
       isLoading = false;
     });
@@ -115,11 +112,8 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
         print(response.body);
       }
     } catch (e) {
-      // SnackbarWidget().snackbarError(
-      //     "Server Ada kendala atau mati, silahkan hubungi pihak pengembang");
       print(e);
     }
-    // print(dataQuotation['id']);
     setState(() {
       isLoading2 = false;
     });
@@ -130,11 +124,11 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Data Penyewaan",
           style: TextStyle(fontSize: 18),
         ),
-        foregroundColor: Color(0xFF686868),
+        foregroundColor: const Color(0xFF686868),
         backgroundColor: Colors.white,
         centerTitle: false,
         elevation: 1,
@@ -142,7 +136,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
       bottomNavigationBar: Container(
         height: cekTrans.isEmpty ? 65 : 108,
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -176,9 +170,10 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                   ),
                   style: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(1),
-                    overlayColor: MaterialStateProperty.all(Color(0xFF3EA8D6)),
+                    overlayColor:
+                        MaterialStateProperty.all(const Color(0xFF3EA8D6)),
                     backgroundColor:
-                        MaterialStateProperty.all(Color(0xFF5DC3EF)),
+                        MaterialStateProperty.all(const Color(0xFF5DC3EF)),
                   ),
                 ),
               ),
@@ -227,14 +222,14 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                 );
                               }
                             },
-                            child: Text('Print Quotation',
+                            child: const Text('Print Quotation',
                                 style: TextStyle(fontSize: 12)),
                             style: ButtonStyle(
                               elevation: MaterialStateProperty.all<double>(1),
-                              overlayColor:
-                                  MaterialStateProperty.all(Color(0xFFC34E4E)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFFED6C6C)),
+                              overlayColor: MaterialStateProperty.all(
+                                  const Color(0xFFC34E4E)),
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFED6C6C)),
                             ),
                           ),
                         ),
@@ -252,17 +247,24 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                 print("NO INTERNET");
                               } else {
                                 //print invoice pdf
-                                InvoicePdf().printPdf();
+                                InvoicePdf().printPdf(
+                                  dataCompany['alamat'],
+                                  dataCompany['kota'],
+                                  dataCompany['no_hp'],
+                                  dataCompany['email'],
+                                  dataCompany['email'],
+                                  widget.id_customer,
+                                );
                               }
                             },
                             child: Text('Print Invoice',
                                 style: TextStyle(fontSize: 12)),
                             style: ButtonStyle(
                               elevation: MaterialStateProperty.all<double>(1),
-                              overlayColor:
-                                  MaterialStateProperty.all(Color(0xFFC34E4E)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFFED6C6C)),
+                              overlayColor: MaterialStateProperty.all(
+                                  const Color(0xFFC34E4E)),
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFED6C6C)),
                             ),
                           ),
                         ),
@@ -273,9 +275,21 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
         ),
       ),
       body: isLoading
-          ? Center(child: Text("Loading"))
+          ? Center(
+              child: Container(
+                width: 60,
+                height: 60,
+                child: Lottie.asset('assets/lottie/loading.json'),
+              ),
+            )
           : isLoading2
-              ? Center(child: Text("Loading"))
+              ? Center(
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    child: Lottie.asset('assets/lottie/loading.json'),
+                  ),
+                )
               : ListView(
                   shrinkWrap: true,
                   physics: cekTrans.isEmpty
@@ -320,16 +334,16 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                   itemBuilder: (context, index) {
                                     return Column(
                                       children: [
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Container(
                                           width: double.infinity,
                                           height: 128,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: Color(0xFFB6B6B6)),
+                                                color: const Color(0xFFB6B6B6)),
                                             borderRadius:
                                                 BorderRadius.circular(7),
-                                            color: Color(0xFFFFFFFF),
+                                            color: const Color(0xFFFFFFFF),
                                           ),
                                           child: Column(
                                             children: [
@@ -359,7 +373,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                       child: Text(
                                                         '${cekTrans[index]['tipe_mobil']}'
                                                             .toUpperCase(),
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                           fontSize: 13,
                                                           fontWeight:
                                                               FontWeight.w600,
@@ -372,7 +386,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                               Container(
                                                 width: double.infinity,
                                                 height: 1,
-                                                color: Color(0xFFB6B6B6),
+                                                color: const Color(0xFFB6B6B6),
                                               ),
                                               Padding(
                                                 padding:
@@ -386,7 +400,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
-                                                      children: [
+                                                      children: const [
                                                         Text(
                                                           "Tanggal Penggunaan",
                                                           style: TextStyle(
@@ -415,7 +429,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(
+                                                        const Text(
                                                           "Lama Penggunaan",
                                                           style: TextStyle(
                                                             color: Color(
@@ -428,7 +442,8 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                         Text(
                                                           cekTrans[index][
                                                               'lama_penggunaan'],
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             color: Color(
                                                                 0xFF616161),
                                                             fontSize: 12,
@@ -444,7 +459,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(
+                                                        const Text(
                                                           "Jumlah",
                                                           style: TextStyle(
                                                             color: Color(
@@ -456,7 +471,8 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                         ),
                                                         Text(
                                                           "${cekTrans[index]['jumlah']} Unit",
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             color: Color(
                                                                 0xFF616161),
                                                             fontSize: 12,
@@ -470,7 +486,8 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                     Container(
                                                       width: double.infinity,
                                                       height: 1,
-                                                      color: Color(0xFFB6B6B6),
+                                                      color: const Color(
+                                                          0xFFB6B6B6),
                                                     ),
                                                     const SizedBox(height: 4),
                                                     Row(
@@ -478,10 +495,11 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(""),
+                                                        const Text(""),
                                                         Text(
                                                           "Rp. ${currencyFormatter.format(double.parse(cekTrans[index]['harga'])).replaceAll('.', ',')}",
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             color: Color(
                                                                 0xFF616161),
                                                             fontSize: 13,

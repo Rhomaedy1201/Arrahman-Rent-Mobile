@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   width: double.infinity,
                   height: 400,

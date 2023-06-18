@@ -1,19 +1,51 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
+import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 
 class InvoicePdf {
-  Future<void> printPdf() async {
+  Future<void> printPdf(
+    String alamat_company,
+    String kota_company,
+    String phone_company,
+    String email_company,
+    String nama_company,
+    int id_customer,
+  ) async {
     final pdf = pw.Document();
     final ByteData imageData = await rootBundle.load('assets/logo/logo.png');
     final Uint8List imageBytes = imageData.buffer.asUint8List();
     final image = pw.MemoryImage(imageBytes);
+
+    // number format
+    final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
+
+    // get Api table data Transportation
+    late Map<String, dynamic> dataTransportation = {};
+    List<dynamic> cekTrans = [];
+    dataTransportation =
+        (await QuotationController().getTransportation(id_customer))!;
+    cekTrans = dataTransportation['transportation'];
+    var list1 = List<dynamic>.from(cekTrans);
+    print("Data = ${cekTrans.length}");
+
+    // menjumlahkan seluruh harga
+    int subTotalRp = 0;
+    for (var i = 0; i < cekTrans.length; i++) {
+      subTotalRp += int.parse(cekTrans[i]['harga']);
+    }
+
+    // PPN
+    var resultPpn = (11 / 100) * subTotalRp;
+
+    // Total
+    var total = subTotalRp + resultPpn;
 
     final header = [
       ['Tanggal digunakan'],
@@ -27,7 +59,7 @@ class InvoicePdf {
     final ketData = [
       [
         'Sewa 2 (dua) unit Kendaraan Roda 4 (empat) periode pembayaran bulan Januari 2022',
-        'Rp. 18,350,000.00',
+        'Rp. ${currencyFormatter.format(double.parse(subTotalRp.toString())).replaceAll('.', ',')}',
       ],
     ];
 
@@ -123,7 +155,7 @@ class InvoicePdf {
             border: pw.Border.all(width: 1),
           ),
           child: pw.Padding(
-            padding: pw.EdgeInsets.symmetric(
+            padding: const pw.EdgeInsets.symmetric(
               horizontal: 10,
               vertical: 3,
             ),
@@ -136,7 +168,7 @@ class InvoicePdf {
               border: pw.Border.all(width: 1),
             ),
             child: pw.Padding(
-              padding: pw.EdgeInsets.all(10),
+              padding: const pw.EdgeInsets.all(10),
               child: pw.Text(
                   "Dua Puluh Juta Seratus Delapan Puluh Lima Ribu Rupiah"),
             )),
@@ -163,7 +195,7 @@ class InvoicePdf {
                 ),
               ),
               pw.Text(
-                "Rp. 18,350,000.00",
+                "Rp. ${currencyFormatter.format(double.parse(subTotalRp.toString())).replaceAll('.', ',')}",
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                 ),
@@ -181,14 +213,14 @@ class InvoicePdf {
               pw.Container(
                 width: 70,
                 child: pw.Text(
-                  "PPn",
+                  "PPN",
                   style: pw.TextStyle(
                     fontWeight: pw.FontWeight.bold,
                   ),
                 ),
               ),
               pw.Text(
-                "10%",
+                "11%",
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                 ),
@@ -208,7 +240,7 @@ class InvoicePdf {
                 child: pw.Text(''),
               ),
               pw.Text(
-                "Rp. 1,835,000.00",
+                "Rp. ${currencyFormatter.format(double.parse(resultPpn.toString())).replaceAll('.', ',')}",
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                 ),
@@ -240,7 +272,7 @@ class InvoicePdf {
                 ),
               ),
               pw.Text(
-                "Rp. 20,185,000.00",
+                "Rp. ${currencyFormatter.format(double.parse(total.toString())).replaceAll('.', ',')}",
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                 ),
@@ -252,11 +284,11 @@ class InvoicePdf {
     );
 
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
-        margin: pw.EdgeInsets.symmetric(vertical: 40, horizontal: 30),
-        build: (pw.Context context) {
-          return pw.Column(
+        margin: const pw.EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+        build: (pw.Context context) => [
+          pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               pw.Row(
@@ -282,14 +314,13 @@ class InvoicePdf {
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.SizedBox(height: 3),
-                        pw.Text(
-                            "Wisma Kedung Asem Indah Blok C No 13 RT 002 RW 005"),
+                        pw.Text(alamat_company),
                         pw.SizedBox(height: 3),
-                        pw.Text("Surabaya"),
+                        pw.Text(kota_company),
                         pw.SizedBox(height: 3),
-                        pw.Text("Phone: [031] 870 4740"),
+                        pw.Text("Phone: +$phone_company"),
                         pw.SizedBox(height: 3),
-                        pw.Text("E-Mail: suhulgroup@gmail.com"),
+                        pw.Text("E-Mail: $email_company"),
                       ],
                     ),
                   ),
@@ -349,8 +380,8 @@ class InvoicePdf {
                 height: 75,
                 // color: PdfColors.amber,
                 child: pw.Padding(
-                  padding:
-                      pw.EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const pw.EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 20),
                   child: pw.Text("Telah Terima Dari :"),
                 ),
               ),
@@ -413,24 +444,16 @@ class InvoicePdf {
                             ],
                           ),
                           pw.SizedBox(height: 5),
-                          pw.Row(
-                            children: [
-                              pw.Container(
-                                width: 12,
-                                height: 12,
-                              ),
-                              pw.SizedBox(width: 10),
-                              pw.Row(
-                                children: [
-                                  pw.Container(
-                                    width: 200,
-                                    // color: PdfColors.red,
-                                    child: pw.Text("No. Rekening :"),
-                                  ),
-                                  pw.Text("a/n ......"),
-                                ],
-                              ),
-                            ],
+                          pw.Container(
+                            width: 250,
+                            // color: PdfColors.red,
+                            child: pw.Text("No. Rekening : "),
+                          ),
+                          pw.SizedBox(height: 5),
+                          pw.Container(
+                            width: 250,
+                            // color: PdfColors.red,
+                            child: pw.Text("a/n : "),
                           ),
                         ],
                       ),
@@ -439,15 +462,15 @@ class InvoicePdf {
 
                   // form ttd
                   pw.Container(
-                    width: 230,
+                    width: 200,
                     // color: PdfColors.red,
                     child: pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Padding(
                           padding: const pw.EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 10,
+                            horizontal: 0,
+                            // vertical: 10,
                           ),
                           child: pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -457,7 +480,7 @@ class InvoicePdf {
                                 pw.Text("PT Suhul Mabrouk Arrahmah,"),
                               ]),
                         ),
-                        pw.SizedBox(height: 100),
+                        pw.SizedBox(height: 80),
                         pw.Container(
                           width: 230,
                           height: 1,
@@ -469,8 +492,8 @@ class InvoicePdf {
                 ],
               ),
             ],
-          );
-        },
+          ),
+        ],
       ),
     );
 

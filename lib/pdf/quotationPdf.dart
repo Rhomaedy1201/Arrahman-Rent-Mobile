@@ -249,7 +249,7 @@ class QuotationPdf {
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Text(
-          "Kutipan Untuk: ${kutipan}",
+          "Kutipan Untuk: $kutipan",
           style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
         ),
         pw.SizedBox(height: 10),
@@ -261,9 +261,9 @@ class QuotationPdf {
         pw.SizedBox(height: 3),
         pw.Text(alamat_customer),
         pw.SizedBox(height: 3),
-        pw.Text("${kota_customer},${kodePos_customer}"),
+        pw.Text("$kota_customer,$kodePos_customer"),
         pw.SizedBox(height: 3),
-        pw.Text("Phone +${phone_customer}"),
+        pw.Text("Phone +$phone_customer"),
         pw.SizedBox(height: 3),
         pw.Row(children: [
           pw.Text(
@@ -386,7 +386,7 @@ class QuotationPdf {
                         "· Jika pelanggan meminta pembatalan setelah mobil diantar, pelanggan akan dikenakan biaya pembatalan 100% dari tarif sewa"),
                     pw.SizedBox(height: 3),
                     pw.Text(
-                        "· Kami dapat menyediakan 8 unit Alphard pada waktu yang disebutkan Terima kasih atas perhatiannya, jika ada pertanyaan mengenai penawaran ini, jangan ragu untuk menghubungi kami di +62-822-3234-5232."),
+                        "jika ada pertanyaan mengenai penawaran ini, jangan ragu untuk menghubungi kami di +62-822-3234-5232."),
                   ],
                 ),
               ),
