@@ -31,6 +31,7 @@ class InvoicePdf {
     String noRekening,
     String nama_rekening,
     String nama_tanda_tangan,
+    String perusahaanCustomer,
   ) async {
     final pdf = pw.Document();
     // get image logo company from api server
@@ -556,7 +557,7 @@ class InvoicePdf {
 
     // Save the PDF to a file
     final output = await getTemporaryDirectory();
-    final file = File('${output.path}/Invoice.pdf');
+    final file = File('${output.path}/Invoice-$perusahaanCustomer.pdf');
     await file.writeAsBytes(await pdf.save());
     await OpenFile.open(file.path);
 

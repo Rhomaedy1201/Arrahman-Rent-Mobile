@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:transportation_rent_mobile/view/history/searchDataHistory.dart';
+import 'package:transportation_rent_mobile/view/page/profileCompanyPage.dart';
 import 'package:transportation_rent_mobile/view/page/quotationPage.dart';
 import 'package:transportation_rent_mobile/view/page/signaturePage.dart';
 
@@ -14,7 +15,7 @@ class ItemHome extends StatelessWidget {
     onTap: () async {
       final connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
-        print("NO INTERNET");
+        debugPrint("NO INTERNET");
       } else {
         Get.to(SignaturePage());
       }
@@ -31,17 +32,17 @@ class ItemHome extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
               width: 65,
               height: 65,
               child:
                   Center(child: Lottie.asset("assets/lottie/signature.json"))),
-          SizedBox(height: 10),
-          Text(
+          const SizedBox(height: 10),
+          const Text(
             "Tambah\nTanda Tangan",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -61,7 +62,7 @@ class ItemHome extends StatelessWidget {
       if (connectivityResult == ConnectivityResult.none) {
         print("NO INTERNET");
       } else {
-        Get.to(QuotationPage());
+        Get.to(const QuotationPage());
       }
     },
     child: Container(
@@ -78,11 +79,11 @@ class ItemHome extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 75,
             height: 75,
             // color: Color(0xFF777777),
@@ -90,8 +91,8 @@ class ItemHome extends StatelessWidget {
               child: Lottie.asset("assets/lottie/kutipan.json"),
             ),
           ),
-          SizedBox(height: 10),
-          Text(
+          const SizedBox(height: 10),
+          const Text(
             "Buat\nKutipan",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -109,9 +110,9 @@ class ItemHome extends StatelessWidget {
     onTap: () async {
       final connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
-        print("NO INTERNET");
+        debugPrint("NO INTERNET");
       } else {
-        Get.offAll(SearchDataHistory());
+        Get.offAll(const SearchDataHistory());
       }
     },
     child: Container(
@@ -128,11 +129,11 @@ class ItemHome extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 75,
             height: 75,
             // color: Color(0xFF777777),
@@ -140,8 +141,8 @@ class ItemHome extends StatelessWidget {
               child: Lottie.asset("assets/lottie/history.json"),
             ),
           ),
-          SizedBox(height: 10),
-          Text(
+          const SizedBox(height: 10),
+          const Text(
             "History\nData Quotation",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -159,9 +160,9 @@ class ItemHome extends StatelessWidget {
     onTap: () async {
       final connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
-        print("NO INTERNET");
+        debugPrint("NO INTERNET");
       } else {
-        Get.to(QuotationPage());
+        Get.to(ProfileCompanyPage());
       }
     },
     child: Container(
@@ -178,11 +179,11 @@ class ItemHome extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 65,
             height: 65,
             // color: Color(0xFF777777),
@@ -190,8 +191,8 @@ class ItemHome extends StatelessWidget {
               child: Lottie.asset("assets/lottie/profile-perusahaan.json"),
             ),
           ),
-          SizedBox(height: 10),
-          Text(
+          const SizedBox(height: 10),
+          const Text(
             "Profil\nPerusahaan",
             textAlign: TextAlign.center,
             style: TextStyle(

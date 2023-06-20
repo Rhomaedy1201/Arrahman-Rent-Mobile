@@ -320,6 +320,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                       ? 'null'
                                       : invoce[0]['a_n_rekening'],
                                   invoce[0]['nama_tanda_tangan'],
+                                  dataQuotation['nama_perusahaan'],
                                 );
                               } else {
                                 Get.to(addDataInvoice(

@@ -34,10 +34,10 @@ class _SplaceScreenState extends State<SplaceScreen> {
             children: [
               Container(
                 width: 250,
-                height: 120,
+                height: 150,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/logo/logo.png'),
+                    image: AssetImage('assets/logo/icon_main.png'),
                     fit: BoxFit.contain,
                   ),
                   // color: Colors.grey,

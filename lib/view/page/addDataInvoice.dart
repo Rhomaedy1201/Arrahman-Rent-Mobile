@@ -69,7 +69,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
               children: [
                 // Nomor Invoice dan tanggal invoice
                 const SizedBox(height: 5),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 80,
                   // color: Colors.amber,

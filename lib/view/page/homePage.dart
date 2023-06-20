@@ -44,10 +44,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: isMobile ? 40 : 80),
                 Text(
-                  "Arahman Rent".toUpperCase(),
+                  "Menu Home",
                   style: TextStyle(
-                    fontSize: isMobile ? 19 : 23,
-                    fontWeight: FontWeight.w700,
+                    fontSize: isMobile ? 17 : 22,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF424242),
                   ),
                 ),
                 SizedBox(height: isMobile ? 10 : 20),
