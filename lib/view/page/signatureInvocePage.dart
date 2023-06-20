@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -160,40 +161,33 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
                         onPressed: () async {
                           exportedImage = await _controller.toPngBytes();
                           setState(() {});
-                          if (exportedImage == null) {
-                            SnackbarWidget().snackbarError(
-                                "Silahkan Tambah Tanda Tangan Terlebih dahulu");
+                          final connectivityResult =
+                              await (Connectivity().checkConnectivity());
+                          if (connectivityResult == ConnectivityResult.none) {
+                            debugPrint("NO INTERNET");
                           } else {
-                            // Get.off(DataTransportationPage(
-                            //     id_customer: widget.id_customer));
-                            SignatureInvoceController().addInvoce(
-                              '${widget.id_customer}',
-                              widget.nomorInvoiceC,
-                              widget.tanggal_invoiceC,
-                              widget.tandaPenerimaC,
-                              widget.keteranganC,
-                              widget.periodePembayaranC,
-                              widget.metodePembayaranC,
-                              widget.namaBankC,
-                              widget.no_rekeningC,
-                              widget.a_n_rekening,
-                              nama_tanda_tanganC.text,
-                              exportedImage!,
-                            );
-                            setState(() {
-                              print = true;
-                            });
-                            // Get.to(
-                            //   addDataInvoice(
-                            //     alamat_company: widget.alamat_company,
-                            //     kota_company: widget.kota_company,
-                            //     noHp_company: widget.noHp_company,
-                            //     email_company: widget.email_company,
-                            //     nama_company: widget.nama_company,
-                            //     id_customer: widget.id_customer,
-                            //     exportedImage: exportedImage,
-                            //   ),
-                            // );
+                            if (exportedImage == null) {
+                              SnackbarWidget().snackbarError(
+                                  "Silahkan Tambah Tanda Tangan Terlebih dahulu");
+                            } else {
+                              SignatureInvoceController().addInvoce(
+                                '${widget.id_customer}',
+                                widget.nomorInvoiceC,
+                                widget.tanggal_invoiceC,
+                                widget.tandaPenerimaC,
+                                widget.keteranganC,
+                                widget.periodePembayaranC,
+                                widget.metodePembayaranC,
+                                widget.namaBankC,
+                                widget.no_rekeningC,
+                                widget.a_n_rekening,
+                                nama_tanda_tanganC.text,
+                                exportedImage!,
+                              );
+                              setState(() {
+                                print = true;
+                              });
+                            }
                           }
                         },
                         child: Text('Simpan', style: TextStyle(fontSize: 13)),
@@ -210,42 +204,6 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
               ],
             ),
             const SizedBox(width: 10),
-            // print == false
-            //     ? Container()
-            //     : SizedBox(
-            //         width: double.infinity,
-            //         height: 50,
-            //         child: ElevatedButton(
-            //           onPressed: () async {
-            // cek internet connection
-            // final connectivityResult =
-            //     await (Connectivity().checkConnectivity());
-            // if (connectivityResult ==
-            //     ConnectivityResult.none) {
-            //   print("NO INTERNET");
-            // } else {
-            //   //print invoice pdf
-            //   InvoicePdf().printPdf(
-            //     dataCompany['alamat'],
-            //     dataCompany['kota'],
-            //     dataCompany['no_hp'],
-            //     dataCompany['email'],
-            //     dataCompany['email'],
-            //     widget.id_customer,
-            //   );
-            // }
-            // },
-            // child:
-            //     Text('Print Invoice', style: TextStyle(fontSize: 13)),
-            // style: ButtonStyle(
-            //   elevation: MaterialStateProperty.all<double>(1),
-            //   overlayColor:
-            //       MaterialStateProperty.all(const Color(0xFFC34E4E)),
-            //   backgroundColor:
-            //       MaterialStateProperty.all(const Color(0xFFED6C6C)),
-            // ),
-            // ),
-            // ),
           ],
         ),
       ),

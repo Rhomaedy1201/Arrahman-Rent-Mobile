@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -480,52 +481,44 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                   width: double.infinity,
                   height: 45,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Get.off(DataTransportationPage(
-                      //     id_customer: widget.id_customer));
-                      // SignatureInvoceController().addInvoce(
-                      //   '${widget.id_customer}',
-                      //   penerimaC.text,
-                      //   keteranganC.text,
-                      //   periodePembayaranC.text,
-                      //   valuePembayaran!,
-                      //   namaBankC.text,
-                      //   noRekeningC.text,
-                      //   namaRekeningC.text,
-                      //   "Tess",
-                      //   widget.exportedImage!,
-                      // );
-                      if (penerimaC.text == '' ||
-                          keteranganC.text == '' ||
-                          periodePembayaranC.text == '' ||
-                          valuePembayaran == null ||
-                          namaBankC.text == '' ||
-                          noRekeningC.text == '' ||
-                          namaRekeningC.text == '') {
-                        SnackbarWidget()
-                            .snackbarError("Data Tidak boleh kosong");
+                    onPressed: () async {
+                      final connectivityResult =
+                          await (Connectivity().checkConnectivity());
+                      if (connectivityResult == ConnectivityResult.none) {
+                        debugPrint("NO INTERNET");
                       } else {
-                        Get.to(SignatureInvocePage(
-                          alamat_company: widget.alamat_company,
-                          kota_company: widget.kota_company,
-                          noHp_company: widget.noHp_company,
-                          email_company: widget.email_company,
-                          nama_company: widget.nama_company,
-                          id_customer: widget.id_customer,
-                          exportedImage: widget.exportedImage == null
-                              ? null
-                              : widget.exportedImage,
-                          nomorInvoiceC: nomorInvoiceC.text,
-                          tanggal_invoiceC:
-                              "${dateTime.year}-${dateTime.month}-${dateTime.day}",
-                          tandaPenerimaC: penerimaC.text,
-                          keteranganC: keteranganC.text,
-                          periodePembayaranC: periodePembayaranC.text,
-                          metodePembayaranC: valuePembayaran!,
-                          namaBankC: namaBankC.text,
-                          no_rekeningC: noRekeningC.text,
-                          a_n_rekening: namaRekeningC.text,
-                        ));
+                        if (penerimaC.text == '' ||
+                            keteranganC.text == '' ||
+                            periodePembayaranC.text == '' ||
+                            valuePembayaran == null ||
+                            namaBankC.text == '' ||
+                            noRekeningC.text == '' ||
+                            namaRekeningC.text == '') {
+                          SnackbarWidget()
+                              .snackbarError("Data Tidak boleh kosong");
+                        } else {
+                          Get.to(SignatureInvocePage(
+                            alamat_company: widget.alamat_company,
+                            kota_company: widget.kota_company,
+                            noHp_company: widget.noHp_company,
+                            email_company: widget.email_company,
+                            nama_company: widget.nama_company,
+                            id_customer: widget.id_customer,
+                            exportedImage: widget.exportedImage == null
+                                ? null
+                                : widget.exportedImage,
+                            nomorInvoiceC: nomorInvoiceC.text,
+                            tanggal_invoiceC:
+                                "${dateTime.year}-${dateTime.month}-${dateTime.day}",
+                            tandaPenerimaC: penerimaC.text,
+                            keteranganC: keteranganC.text,
+                            periodePembayaranC: periodePembayaranC.text,
+                            metodePembayaranC: valuePembayaran!,
+                            namaBankC: namaBankC.text,
+                            no_rekeningC: noRekeningC.text,
+                            a_n_rekening: namaRekeningC.text,
+                          ));
+                        }
                       }
                     },
                     child: Text('Selajutnya', style: TextStyle(fontSize: 13)),
@@ -538,74 +531,6 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                     ),
                   ),
                 ),
-                // const SizedBox(height: 10),
-                // SizedBox(
-                //   width: double.infinity,
-                //   height: 45,
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //       InvoicePdf().printPdf(
-                //         widget.alamat_company,
-                //         widget.kota_company,
-                //         widget.noHp_company,
-                //         widget.email_company,
-                //         widget.nama_company,
-                //         widget.id_customer,
-                //         widget.exportedImage,
-                //         //
-                //         penerimaC.text,
-                //         keteranganC.text,
-                //         periodePembayaranC.text,
-                //         valuePembayaran.toString(),
-                //         namaBankC.text,
-                //         noRekeningC.text,
-                //         namaRekeningC.text,
-                //       );
-                //     },
-                //     child:
-                //         Text('Print Invoice', style: TextStyle(fontSize: 13)),
-                //     style: ButtonStyle(
-                //       elevation: MaterialStateProperty.all<double>(1),
-                //       overlayColor:
-                //           MaterialStateProperty.all(const Color(0xFFC34E4E)),
-                //       backgroundColor:
-                //           MaterialStateProperty.all(const Color(0xFFED6C6C)),
-                //     ),
-                //   ),
-                // ),
-                // const SizedBox(height: 10),
-                // SizedBox(
-                //   width: double.infinity,
-                //   height: 45,
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //       Get.to(
-                //         SignatureInvocePage(
-                //           alamat_company: widget.alamat_company,
-                //           kota_company: widget.kota_company,
-                //           noHp_company: widget.noHp_company,
-                //           email_company: widget.email_company,
-                //           nama_company: widget.nama_company,
-                //           id_customer: widget.id_customer,
-                //           exportedImage: widget.exportedImage == null
-                //               ? null
-                //               : widget.exportedImage,
-                //         ),
-                //       );
-                //     },
-                //     child: Text(
-                //       'Tambah Tanda Tangan',
-                //       style: TextStyle(fontSize: 13),
-                //     ),
-                //     style: ButtonStyle(
-                //       elevation: MaterialStateProperty.all<double>(1),
-                //       overlayColor:
-                //           MaterialStateProperty.all(const Color(0xFFC34E4E)),
-                //       backgroundColor:
-                //           MaterialStateProperty.all(const Color(0xFFED6C6C)),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

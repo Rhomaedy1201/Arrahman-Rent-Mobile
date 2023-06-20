@@ -357,7 +357,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                             .checkConnectivity());
                                     if (connectivityResult ==
                                         ConnectivityResult.none) {
-                                      print("NO INTERNET");
+                                      debugPrint("NO INTERNET");
                                     } else {
                                       // to Data Transportation
                                       Get.offAll(

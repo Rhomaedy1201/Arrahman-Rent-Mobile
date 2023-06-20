@@ -278,73 +278,53 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                           child: ElevatedButton(
                             onPressed: () async {
                               // cek internet connection
-                              // final connectivityResult =
-                              //     await (Connectivity().checkConnectivity());
-                              // if (connectivityResult ==
-                              //     ConnectivityResult.none) {
-                              //   print("NO INTERNET");
-                              // } else {
-                              //   //print invoice pdf
-                              //   InvoicePdf().printPdf(
-                              //     dataCompany['alamat'],
-                              //     dataCompany['kota'],
-                              //     dataCompany['no_hp'],
-                              //     dataCompany['email'],
-                              //     dataCompany['email'],
-                              //     widget.id_customer,
-                              //   );
-                              // }
-                              if (invoce.isNotEmpty) {
-                                InvoicePdf().printPdf(
-                                  dataCompany['logo'],
-                                  dataCompany['alamat'],
-                                  dataCompany['kota'],
-                                  dataCompany['no_hp'],
-                                  dataCompany['email'],
-                                  dataCompany['nama_company'],
-                                  widget.id_customer,
-                                  invoce[0]['nomor_invoice'],
-                                  invoce[0]['tanggal_invoice'],
-                                  invoce[0]['img_tanda_tangan'],
-                                  invoce[0]['tanda_penerima_pembayaran'],
-                                  invoce[0]['keterangan'],
-                                  invoce[0]['periode_pembayaran'],
-                                  invoce[0]['metode_pembayaran'],
-                                  invoce[0]['nama_bank'] == null
-                                      ? 'null'
-                                      : invoce[0]['nama_bank'],
-                                  invoce[0]['no_rekening'] == null
-                                      ? 'null'
-                                      : invoce[0]['no_rekening'],
-                                  invoce[0]['a_n_rekening'] == null
-                                      ? 'null'
-                                      : invoce[0]['a_n_rekening'],
-                                  invoce[0]['nama_tanda_tangan'],
-                                  dataQuotation['nama_perusahaan'],
-                                );
+                              final connectivityResult =
+                                  await (Connectivity().checkConnectivity());
+                              if (connectivityResult ==
+                                  ConnectivityResult.none) {
+                                print("NO INTERNET");
                               } else {
-                                Get.to(addDataInvoice(
-                                  alamat_company: dataCompany['alamat'],
-                                  kota_company: dataCompany['kota'],
-                                  noHp_company: dataCompany['no_hp'],
-                                  email_company: dataCompany['email'],
-                                  nama_company: dataCompany['email'],
-                                  id_customer: widget.id_customer,
-                                  exportedImage: null,
-                                ));
+                                //print invoice pdf
+                                if (invoce.isNotEmpty) {
+                                  InvoicePdf().printPdf(
+                                    dataCompany['logo'],
+                                    dataCompany['alamat'],
+                                    dataCompany['kota'],
+                                    dataCompany['no_hp'],
+                                    dataCompany['email'],
+                                    dataCompany['nama_company'],
+                                    widget.id_customer,
+                                    invoce[0]['nomor_invoice'],
+                                    invoce[0]['tanggal_invoice'],
+                                    invoce[0]['img_tanda_tangan'],
+                                    invoce[0]['tanda_penerima_pembayaran'],
+                                    invoce[0]['keterangan'],
+                                    invoce[0]['periode_pembayaran'],
+                                    invoce[0]['metode_pembayaran'],
+                                    invoce[0]['nama_bank'] == null
+                                        ? 'null'
+                                        : invoce[0]['nama_bank'],
+                                    invoce[0]['no_rekening'] == null
+                                        ? 'null'
+                                        : invoce[0]['no_rekening'],
+                                    invoce[0]['a_n_rekening'] == null
+                                        ? 'null'
+                                        : invoce[0]['a_n_rekening'],
+                                    invoce[0]['nama_tanda_tangan'],
+                                    dataQuotation['nama_perusahaan'],
+                                  );
+                                } else {
+                                  Get.to(addDataInvoice(
+                                    alamat_company: dataCompany['alamat'],
+                                    kota_company: dataCompany['kota'],
+                                    noHp_company: dataCompany['no_hp'],
+                                    email_company: dataCompany['email'],
+                                    nama_company: dataCompany['email'],
+                                    id_customer: widget.id_customer,
+                                    exportedImage: null,
+                                  ));
+                                }
                               }
-
-                              // Get.to(
-                              //   SignatureInvocePage(
-                              //     alamat_company: dataCompany['alamat'],
-                              //     kota_company: dataCompany['kota'],
-                              //     noHp_company: dataCompany['no_hp'],
-                              //     email_company: dataCompany['email'],
-                              //     nama_company: dataCompany['email'],
-                              //     id_customer: widget.id_customer,
-                              //     exportedImage: null,
-                              //   ),
-                              // );
                             },
                             child: Text(
                                 invoce.isNotEmpty

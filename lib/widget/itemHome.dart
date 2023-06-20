@@ -7,9 +7,9 @@ import 'package:transportation_rent_mobile/view/page/profileCompanyPage.dart';
 import 'package:transportation_rent_mobile/view/page/quotationPage.dart';
 import 'package:transportation_rent_mobile/view/page/signaturePage.dart';
 
-class ItemHome extends StatelessWidget {
+class ItemHome {
   late bool isMobile;
-  ItemHome({super.key, required this.isMobile});
+  ItemHome({required this.isMobile});
 
   Widget createSignature = InkWell(
     onTap: () async {
@@ -205,9 +205,4 @@ class ItemHome extends StatelessWidget {
       ),
     ),
   );
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }
