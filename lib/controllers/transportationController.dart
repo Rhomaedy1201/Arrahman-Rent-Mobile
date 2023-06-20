@@ -29,6 +29,7 @@ class TransportationController {
           SnackbarWidget().snackbarSuccess(response.body['message']);
           Get.offAll(DataTransportationPage(
             id_customer: id_customer,
+            isBack: 'false',
           ));
         } else {
           SnackbarWidget().snackbarError(response.body['message']);

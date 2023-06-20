@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:transportation_rent_mobile/controllers/refrestController.dart';
-import 'package:transportation_rent_mobile/controllers/signatureInvoceController.dart';
-import 'package:transportation_rent_mobile/pdf/invoicePdf.dart';
-import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
 import 'package:transportation_rent_mobile/view/page/signatureInvocePage.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
@@ -32,7 +29,10 @@ class addDataInvoice extends StatefulWidget {
 }
 
 class _addDataInvoiceState extends State<addDataInvoice> {
-  final RefreshController _controller = Get.find<RefreshController>();
+  DateTime dateTime =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  var nomorInvoiceC = TextEditingController(text: '');
   var penerimaC = TextEditingController(text: '');
   var keteranganC = TextEditingController(text: '');
   var periodePembayaranC = TextEditingController(text: '');
@@ -52,7 +52,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Tambah Invoice",
+          "Nomor Invoice",
           style: TextStyle(fontSize: 18),
         ),
         foregroundColor: const Color(0xFF686868),
@@ -67,7 +67,127 @@ class _addDataInvoiceState extends State<addDataInvoice> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Nomor Invoice dan tanggal invoice
+                const SizedBox(height: 5),
+                Container(
+                  width: double.infinity,
+                  height: 80,
+                  // color: Colors.amber,
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisSpacing: 10,
+                    children: <Widget>[
+                      Container(
+                        width: double.infinity,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Nomor Invoice",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 5),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: TextField(
+                                style:
+                                    const TextStyle(color: Color(0xFF616161)),
+                                cursorColor: const Color(0xFF737373),
+                                decoration: const InputDecoration(
+                                  hintText: 'Contoh 012112001',
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF8F8F8F), fontSize: 13),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4)),
+                                    borderSide: BorderSide(
+                                        width: 1, color: Color(0xFF515151)),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4)),
+                                    borderSide: BorderSide(
+                                        width: 1, color: Color(0xFFE4E4E4)),
+                                  ),
+                                ),
+                                autocorrect: false,
+                                maxLines: 1,
+                                controller: nomorInvoiceC,
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.next,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(9),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Tanggal Invoice dibuat",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 5),
+                            InkWell(
+                              onTap: () async {
+                                final date = await pickerDate();
+                                if (date == null) return;
+                                final newDateTime = DateTime(
+                                  date.year,
+                                  date.month,
+                                  date.day,
+                                );
+                                setState(() {
+                                  dateTime = date;
+                                });
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color(0xFFE4E4E4),
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(4))),
+                                height: 50,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Text(
+                                        "${dateTime.year}-${dateTime.month}-${dateTime.day}",
+                                        style: const TextStyle(
+                                            color: Color(0xFF515151),
+                                            fontSize: 13),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
                 // Tanda Terima Pembayaran
+                const SizedBox(height: 5),
                 const Text(
                   "Tanda Terima Pembayaran",
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
@@ -243,7 +363,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                               style: const TextStyle(color: Color(0xFF616161)),
                               cursorColor: const Color(0xFF737373),
                               decoration: const InputDecoration(
-                                hintText: 'Contoh. BCA',
+                                hintText: 'Contoh. BRI',
                                 hintStyle: TextStyle(
                                     color: Color(0xFF8F8F8F), fontSize: 13),
                                 focusedBorder: OutlineInputBorder(
@@ -281,7 +401,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                               style: const TextStyle(color: Color(0xFF616161)),
                               cursorColor: const Color(0xFF737373),
                               decoration: const InputDecoration(
-                                hintText: 'Contoh. 0234567891',
+                                hintText: 'Contoh. 023-456-78910-2889',
                                 hintStyle: TextStyle(
                                     color: Color(0xFF8F8F8F), fontSize: 13),
                                 focusedBorder: OutlineInputBorder(
@@ -306,7 +426,11 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                               autocorrect: false,
                               maxLines: 1,
                               controller: noRekeningC,
+                              keyboardType: TextInputType.number,
                               textInputAction: TextInputAction.next,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(25),
+                              ],
                             ),
                           ),
 
@@ -391,6 +515,9 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                           exportedImage: widget.exportedImage == null
                               ? null
                               : widget.exportedImage,
+                          nomorInvoiceC: nomorInvoiceC.text,
+                          tanggal_invoiceC:
+                              "${dateTime.year}-${dateTime.month}-${dateTime.day}",
                           tandaPenerimaC: penerimaC.text,
                           keteranganC: keteranganC.text,
                           periodePembayaranC: periodePembayaranC.text,
@@ -486,4 +613,11 @@ class _addDataInvoiceState extends State<addDataInvoice> {
       ),
     );
   }
+
+  Future<DateTime?> pickerDate() => showDatePicker(
+        context: context,
+        initialDate: dateTime,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100),
+      );
 }

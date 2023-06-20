@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,15 +9,19 @@ import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:transportation_rent_mobile/utils/convertNumberToLatters.dart';
+import 'package:transportation_rent_mobile/utils/convertOriginalDate.dart';
 
 class InvoicePdf {
   Future<void> printPdf(
+    String logo_company,
     String alamat_company,
     String kota_company,
     String phone_company,
     String email_company,
     String nama_company,
     int id_customer,
+    String nomor_invoice,
+    String tanggal_invoice,
     String exportedImage,
     String tanda_penerima_pembayaran,
     String keterangan,
@@ -31,16 +33,31 @@ class InvoicePdf {
     String nama_tanda_tangan,
   ) async {
     final pdf = pw.Document();
-    final ByteData imageData = await rootBundle.load('assets/logo/logo.png');
-    final Uint8List imageBytes = imageData.buffer.asUint8List();
-    final image = pw.MemoryImage(imageBytes);
-    print("Byte = $exportedImage");
+    // get image logo company from api server
+    final url_logo_company = '$urlWeb/storage/$logo_company';
+    final response_logo_company = await http.get(Uri.parse(url_logo_company));
+    final bytes_logo_company = response_logo_company.bodyBytes;
+
+    //format phone Company
+    String? formattedPhoneCompany;
+    if (phone_company.contains('[') && phone_company.contains(']')) {
+      formattedPhoneCompany =
+          phone_company.replaceRange(5, 5, ' ').replaceRange(9, 9, ' ');
+    } else {
+      formattedPhoneCompany = phone_company.replaceAllMapped(
+          RegExp(r".{4}"), (match) => "${match.group(0)} ");
+    }
 
     // get image from api server
-    final url = '$urlWeb/storage/$exportedImage'; // Replace with your image URL
-    print(url);
+    final url = '$urlWeb/storage/$exportedImage';
     final response = await http.get(Uri.parse(url));
     final bytes_ttd = response.bodyBytes;
+
+    // Convert original date
+    String originalDateInvoice =
+        ConvertOriginalDate().dateFormat(tanggal_invoice);
+    String originalDateAddMonth =
+        ConvertOriginalDate().dateFormatNameMont(tanggal_invoice);
 
     // number format
     final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
@@ -52,7 +69,7 @@ class InvoicePdf {
         (await QuotationController().getTransportation(id_customer))!;
     cekTrans = dataTransportation['transportation'];
     var list1 = List<dynamic>.from(cekTrans);
-    print("Data = ${cekTrans.length}");
+    // print("Data = ${cekTrans.length}");
 
     // menjumlahkan seluruh harga
     int subTotalRp = 0;
@@ -77,7 +94,7 @@ class InvoicePdf {
     ];
     final ketData = [
       [
-        '$keterangan $periode_pembayaran',
+        '$keterangan Periode Pembayaran $periode_pembayaran',
         'Rp. ${currencyFormatter.format(double.parse(subTotalRp.toString())).replaceAll('.', ',')}',
       ],
     ];
@@ -316,7 +333,7 @@ class InvoicePdf {
                   pw.SizedBox(
                     width: 200,
                     height: 150,
-                    child: pw.Image(image),
+                    child: pw.Image(pw.MemoryImage(bytes_logo_company)),
                   ),
                 ],
               ),
@@ -337,7 +354,7 @@ class InvoicePdf {
                         pw.SizedBox(height: 3),
                         pw.Text(kota_company),
                         pw.SizedBox(height: 3),
-                        pw.Text("Phone: +$phone_company"),
+                        pw.Text("Phone: +62 $formattedPhoneCompany"),
                         pw.SizedBox(height: 3),
                         pw.Text("E-Mail: $email_company"),
                       ],
@@ -369,7 +386,7 @@ class InvoicePdf {
                               ),
                             ),
                             child: pw.Center(
-                              child: pw.Text("1/01/2002"),
+                              child: pw.Text(originalDateInvoice),
                             ),
                           ),
                           pw.Container(
@@ -383,7 +400,7 @@ class InvoicePdf {
                               ),
                             ),
                             child: pw.Center(
-                              child: pw.Text("'012112001"),
+                              child: pw.Text(nomor_invoice),
                             ),
                           ),
                         ],
@@ -503,9 +520,9 @@ class InvoicePdf {
                           child: pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
                               children: [
-                                pw.Text("Surabaya,14 Januari 2022"),
+                                pw.Text("$kota_company, $originalDateAddMonth"),
                                 pw.SizedBox(height: 10),
-                                pw.Text("PT Suhul Mabrouk Arrahmah,"),
+                                pw.Text(nama_company),
                               ]),
                         ),
                         pw.SizedBox(height: 20),
@@ -520,7 +537,7 @@ class InvoicePdf {
                           ),
                         ),
                         // pw.SizedBox(height: 3),
-                        pw.Text("M. Fadil Jaidi"),
+                        pw.Text(nama_tanda_tangan),
                         pw.Container(
                           width: 230,
                           height: 1,

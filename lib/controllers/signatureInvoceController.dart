@@ -15,6 +15,8 @@ class SignatureInvoceController {
 
   Future<void> addInvoce(
     String id_customer,
+    String nomor_invoice,
+    String tanggal_invoice,
     String tanda_penerima_pembayaran,
     String keterangan,
     String periode_pembayaran,
@@ -30,6 +32,8 @@ class SignatureInvoceController {
       // Make API post request
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['id_customer'] = id_customer as String;
+      request.fields['nomor_invoice'] = nomor_invoice;
+      request.fields['tanggal_invoice'] = tanggal_invoice;
       request.fields['tanda_penerima_pembayaran'] = tanda_penerima_pembayaran;
       request.fields['keterangan'] = keterangan;
       request.fields['periode_pembayaran'] = periode_pembayaran;
@@ -50,6 +54,7 @@ class SignatureInvoceController {
         Get.offAll(
           DataTransportationPage(
             id_customer: int.parse(id_customer),
+            isBack: 'false',
           ),
         );
         print(responseString);

@@ -1,14 +1,13 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
-import 'package:printing/printing.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'package:pdf/widgets.dart' as pdfWidgets;
+// import 'package:pdf/widgets.dart' as pdfWidgets;
 import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 
@@ -41,6 +40,25 @@ class QuotationPdf {
 
     // number format
     final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
+
+    //format phone Company
+    String? formattedPhoneCompany;
+    if (phone_company.contains('[') && phone_company.contains(']')) {
+      formattedPhoneCompany =
+          phone_company.replaceRange(5, 5, ' ').replaceRange(9, 9, ' ');
+    } else {
+      formattedPhoneCompany = phone_company.replaceAllMapped(
+          RegExp(r".{4}"), (match) => "${match.group(0)} ");
+    }
+    //format phone Company
+    String? formattedPhoneCustomer;
+    if (phone_customer.contains('[') && phone_customer.contains(']')) {
+      formattedPhoneCustomer =
+          phone_customer.replaceRange(5, 5, ' ').replaceRange(9, 9, ' ');
+    } else {
+      formattedPhoneCustomer = phone_customer.replaceAllMapped(
+          RegExp(r".{4}"), (match) => "${match.group(0)} ");
+    }
 
     // convert to original date
     final inputFormat = DateFormat('yyyy-MM-dd');
@@ -263,7 +281,7 @@ class QuotationPdf {
         pw.SizedBox(height: 3),
         pw.Text("$kota_customer,$kodePos_customer"),
         pw.SizedBox(height: 3),
-        pw.Text("Phone +$phone_customer"),
+        pw.Text("Phone +62 $formattedPhoneCustomer"),
         pw.SizedBox(height: 3),
         pw.Row(children: [
           pw.Text(
@@ -347,7 +365,7 @@ class QuotationPdf {
                       ],
                     ),
                     pw.SizedBox(height: 3),
-                    pw.Text("Phone: $phone_company"),
+                    pw.Text("Phone: +62 $formattedPhoneCompany"),
                     pw.SizedBox(height: 3),
                     pw.Text("Email: $email_company"),
                     pw.SizedBox(height: 3),
@@ -399,9 +417,10 @@ class QuotationPdf {
                     child: pw.Column(
                       children: [
                         pw.Text("Dengan hormat,"),
-                        pw.SizedBox(
-                          width: 50,
-                          height: 50,
+                        pw.Container(
+                          width: 70,
+                          height: 100,
+                          // color: PdfColors.amber,
                           child: pw.Image(pw.MemoryImage(bytes_ttd)),
                         ),
                         pw.Text(nama_ttd),

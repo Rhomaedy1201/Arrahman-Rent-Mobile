@@ -17,19 +17,22 @@ class _HomePageState extends State<HomePage> {
   ];
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.shortestSide < 600;
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            padding: EdgeInsets.symmetric(
+                horizontal: 30, vertical: isMobile ? 15 : 80),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
                   child: Container(
-                    width: 200,
-                    height: 50,
+                    width: isMobile ? 200 : 300,
+                    height: isMobile ? 50 : 70,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/logo/logo.png'),
@@ -39,19 +42,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: isMobile ? 40 : 80),
                 Text(
                   "Arahman Rent".toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 19,
+                  style: TextStyle(
+                    fontSize: isMobile ? 19 : 23,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: isMobile ? 10 : 20),
                 Container(
                   width: double.infinity,
                   // height: 400,
-                  color: Colors.amber,
                   // color: Colors.amber,
                   child: GridView.count(
                     primary: false,
@@ -60,28 +62,28 @@ class _HomePageState extends State<HomePage> {
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    crossAxisCount: 2,
+                    crossAxisCount: isMobile ? 2 : 4,
                     children: <Widget>[
-                      ItemHome().createSignature,
-                      ItemHome().createQuotation,
-                      ItemHome().searchDataQuotation,
-                      ItemHome().changeCompany,
+                      ItemHome(isMobile: isMobile).createSignature,
+                      ItemHome(isMobile: isMobile).createQuotation,
+                      ItemHome(isMobile: isMobile).searchDataQuotation,
+                      ItemHome(isMobile: isMobile).changeCompany,
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                    ),
-                    itemBuilder: (context, index) {
-                      return Container();
-                    },
-                  ),
-                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: GridView.builder(
+                //     shrinkWrap: true,
+                //     gridDelegate:
+                //         const SliverGridDelegateWithMaxCrossAxisExtent(
+                //       maxCrossAxisExtent: 200,
+                //     ),
+                //     itemBuilder: (context, index) {
+                //       return Container();
+                //     },
+                //   ),
+                // ),
               ],
             ),
           ),

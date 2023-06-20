@@ -16,7 +16,9 @@ class SignatureInvocePage extends StatefulWidget {
       nama_company;
   int id_customer;
   Uint8List? exportedImage;
-  String tandaPenerimaC,
+  String nomorInvoiceC,
+      tanggal_invoiceC,
+      tandaPenerimaC,
       keteranganC,
       periodePembayaranC,
       metodePembayaranC,
@@ -34,6 +36,8 @@ class SignatureInvocePage extends StatefulWidget {
     required this.id_customer,
     required this.exportedImage,
     //invoice
+    required this.nomorInvoiceC,
+    required this.tanggal_invoiceC,
     required this.tandaPenerimaC,
     required this.keteranganC,
     required this.periodePembayaranC,
@@ -164,6 +168,8 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
                             //     id_customer: widget.id_customer));
                             SignatureInvoceController().addInvoce(
                               '${widget.id_customer}',
+                              widget.nomorInvoiceC,
+                              widget.tanggal_invoiceC,
                               widget.tandaPenerimaC,
                               widget.keteranganC,
                               widget.periodePembayaranC,

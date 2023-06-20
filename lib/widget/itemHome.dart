@@ -7,9 +7,10 @@ import 'package:transportation_rent_mobile/view/page/quotationPage.dart';
 import 'package:transportation_rent_mobile/view/page/signaturePage.dart';
 
 class ItemHome extends StatelessWidget {
-  ItemHome({super.key});
+  late bool isMobile;
+  ItemHome({super.key, required this.isMobile});
 
-  final createSignature = InkWell(
+  Widget createSignature = InkWell(
     onTap: () async {
       final connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
@@ -32,15 +33,16 @@ class ItemHome extends StatelessWidget {
       ),
       padding: EdgeInsets.all(10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 65,
-            height: 65,
-            child: Center(child: Lottie.asset("assets/lottie/signature.json")),
-          ),
+              width: 65,
+              height: 65,
+              child:
+                  Center(child: Lottie.asset("assets/lottie/signature.json"))),
           SizedBox(height: 10),
           Text(
-            "Tambah Tanda Tangan",
+            "Tambah\nTanda Tangan",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 15,
@@ -78,6 +80,7 @@ class ItemHome extends StatelessWidget {
       ),
       padding: EdgeInsets.all(0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 75,
@@ -127,6 +130,7 @@ class ItemHome extends StatelessWidget {
       ),
       padding: EdgeInsets.all(0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 75,
@@ -176,6 +180,7 @@ class ItemHome extends StatelessWidget {
       ),
       padding: EdgeInsets.all(10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 65,

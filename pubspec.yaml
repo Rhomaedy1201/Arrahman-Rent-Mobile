@@ -42,10 +42,10 @@ dependencies:
   image: ^3.0.2
   path_provider: ^2.0.5
   pdf: ^3.8.4
-  printing: ^5.9.3
+  printing: 
   open_file: ^3.3.2
   flutter_cache_manager: ^3.3.0
-  connectivity_plus: ^3.0.0
+  connectivity_plus: 
   
 
 dev_dependencies:

@@ -10,11 +10,20 @@ class DataQuotation {
     String alamat,
     String email,
   ) {
+    String? formattedPhoneNumber;
+    if (no_hp.contains('[') && no_hp.contains(']')) {
+      formattedPhoneNumber =
+          no_hp.replaceRange(5, 5, ' ').replaceRange(9, 9, ' ');
+    } else {
+      formattedPhoneNumber = no_hp.replaceAllMapped(
+          RegExp(r".{4}"), (match) => "${match.group(0)} ");
+    }
+
     return Column(
       children: [
         Container(
           width: double.infinity,
-          color: Color(0xFFF9F9F9),
+          color: const Color(0xFFF9F9F9),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Row(
@@ -44,7 +53,7 @@ class DataQuotation {
         ),
         Container(
           width: double.infinity,
-          color: Color(0xFFF4F4F4),
+          color: const Color(0xFFF4F4F4),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Row(
@@ -56,7 +65,7 @@ class DataQuotation {
                       fontWeight: FontWeight.w400,
                       color: Color(0xFF505050),
                     )),
-                Text(no_hp,
+                Text('+62 $formattedPhoneNumber',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -68,7 +77,7 @@ class DataQuotation {
         ),
         Container(
           width: double.infinity,
-          color: Color(0xFFF4F4F4),
+          color: const Color(0xFFF9F9F9),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Row(
@@ -98,7 +107,7 @@ class DataQuotation {
         ),
         Container(
           width: double.infinity,
-          color: Color(0xFFF4F4F4),
+          color: const Color(0xFFF4F4F4),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Row(
@@ -122,7 +131,7 @@ class DataQuotation {
         ),
         Container(
           width: double.infinity,
-          color: Color(0xFFF4F4F4),
+          color: const Color(0xFFF9F9F9),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Row(
@@ -152,7 +161,7 @@ class DataQuotation {
         ),
         Container(
           width: double.infinity,
-          color: Color(0xFFF4F4F4),
+          color: const Color(0xFFF4F4F4),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Row(

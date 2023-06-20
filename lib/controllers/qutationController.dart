@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:transportation_rent_mobile/models/quotationModel.dart';
 import 'package:transportation_rent_mobile/providers/quotationProvider.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
@@ -45,8 +44,9 @@ class QuotationController extends GetxController {
         if (response.statusCode == 200) {
           SnackbarWidget().snackbarSuccess(response.body['message']);
           var getIdCus = response.body['data'];
-          Get.to(DataTransportationPage(
+          Get.offAll(DataTransportationPage(
             id_customer: getIdCus['id'],
+            isBack: 'false',
           ));
         } else {
           SnackbarWidget().snackbarError(response.body['message']);

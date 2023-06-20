@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Transportastion Rent',
       home: SplaceScreen(),
+
+      // home: CekPage(),
     );
   }
 }

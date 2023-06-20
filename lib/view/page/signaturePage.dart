@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:transportation_rent_mobile/controllers/signatureUserController.dart';
 import 'package:transportation_rent_mobile/widget/materialDialogWidget.dart';
