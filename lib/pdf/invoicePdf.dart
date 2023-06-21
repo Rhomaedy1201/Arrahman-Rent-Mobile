@@ -35,7 +35,7 @@ class InvoicePdf {
   ) async {
     final pdf = pw.Document();
     // get image logo company from api server
-    final url_logo_company = '$urlWeb/storage/$logo_company';
+    final url_logo_company = '$urlWeb/public/storage/$logo_company';
     final response_logo_company = await http.get(Uri.parse(url_logo_company));
     final bytes_logo_company = response_logo_company.bodyBytes;
 
@@ -50,7 +50,7 @@ class InvoicePdf {
     }
 
     // get image from api server
-    final url = '$urlWeb/storage/$exportedImage';
+    final url = '$urlWeb/public/storage/$exportedImage';
     final response = await http.get(Uri.parse(url));
     final bytes_ttd = response.bodyBytes;
 
@@ -85,7 +85,7 @@ class InvoicePdf {
     int total = (subTotalRp + resultPpn).toInt();
 
     final header = [
-      ['Tanggal digunakan'],
+      ['Tanda Terima Pembayaran'],
     ];
     final header2 = [
       [
@@ -96,7 +96,7 @@ class InvoicePdf {
     final ketData = [
       [
         '$keterangan Periode Pembayaran $periode_pembayaran',
-        'Rp. ${currencyFormatter.format(double.parse(subTotalRp.toString())).replaceAll('.', ',')}',
+        'Rp ${currencyFormatter.format(double.parse(subTotalRp.toString()))}',
       ],
     ];
 
@@ -232,7 +232,7 @@ class InvoicePdf {
                 ),
               ),
               pw.Text(
-                "Rp. ${currencyFormatter.format(double.parse(subTotalRp.toString())).replaceAll('.', ',')}",
+                "Rp ${currencyFormatter.format(double.parse(subTotalRp.toString()))}",
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                 ),
@@ -277,7 +277,7 @@ class InvoicePdf {
                 child: pw.Text(''),
               ),
               pw.Text(
-                "Rp. ${currencyFormatter.format(double.parse(resultPpn.toString())).replaceAll('.', ',')}",
+                "Rp ${currencyFormatter.format(double.parse(resultPpn.toString()))}",
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                 ),
@@ -309,7 +309,7 @@ class InvoicePdf {
                 ),
               ),
               pw.Text(
-                "Rp. ${currencyFormatter.format(double.parse(total.toString())).replaceAll('.', ',')}",
+                "Rp ${currencyFormatter.format(double.parse(total.toString()))}",
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                 ),
@@ -419,8 +419,8 @@ class InvoicePdf {
                 child: pw.Padding(
                   padding: const pw.EdgeInsets.symmetric(
                       horizontal: 20, vertical: 20),
-                  child:
-                      pw.Text("Telah Terima Dari : $tanda_penerima_pembayaran"),
+                  child: pw.Text(
+                      "Telah Terima Dari : ${tanda_penerima_pembayaran == 'null' ? '' : tanda_penerima_pembayaran}"),
                 ),
               ),
               keteranganTableHeader,
@@ -486,20 +486,23 @@ class InvoicePdf {
                                 ),
                               ),
                               pw.SizedBox(width: 10),
-                              pw.Text("Transfer melalui : $nama_bank"),
+                              pw.Text(
+                                  "Transfer melalui : ${nama_bank == 'null' ? '' : nama_bank}"),
                             ],
                           ),
                           pw.SizedBox(height: 5),
                           pw.Container(
                             width: 250,
                             // color: PdfColors.red,
-                            child: pw.Text("No. Rekening : $noRekening"),
+                            child: pw.Text(
+                                "No. Rekening : ${noRekening == 'null' ? '' : noRekening}"),
                           ),
                           pw.SizedBox(height: 5),
                           pw.Container(
                             width: 250,
                             // color: PdfColors.red,
-                            child: pw.Text("a/n : $nama_rekening"),
+                            child: pw.Text(
+                                "a/n : ${nama_rekening == 'null' ? '' : nama_rekening}"),
                           ),
                         ],
                       ),
@@ -530,7 +533,7 @@ class InvoicePdf {
                         pw.Center(
                           child: pw.Container(
                             width: 100,
-                            height: 100,
+                            height: 50,
                             // color: PdfColors.amber,
                             child: pw.Image(
                               pw.MemoryImage(bytes_ttd),

@@ -44,8 +44,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     "karina.purwiyono@contracted.sampoerna.com",
   ];
 
-  final currencyFormatter =
-      NumberFormat.currency(locale: 'ID', symbol: '', decimalDigits: 0);
+  final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
 
   @override
   void initState() {
@@ -222,7 +221,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: 130,
+                          width: 150,
                           height: 40,
                           child: ElevatedButton(
                             onPressed: () async {
@@ -260,7 +259,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                 );
                               }
                             },
-                            child: const Text('Convert Quotation',
+                            child: const Text('Generate Quotation',
                                 style: TextStyle(fontSize: 12)),
                             style: ButtonStyle(
                               elevation: MaterialStateProperty.all<double>(1),
@@ -273,7 +272,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                         ),
                         const SizedBox(width: 10),
                         SizedBox(
-                          width: 130,
+                          width: 150,
                           height: 40,
                           child: ElevatedButton(
                             onPressed: () async {
@@ -328,7 +327,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                             },
                             child: Text(
                                 invoce.isNotEmpty
-                                    ? 'Convert Invoice'
+                                    ? 'Generate Invoice'
                                     : 'Tambah Invoice',
                                 style: TextStyle(fontSize: 12)),
                             style: ButtonStyle(
@@ -569,7 +568,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                       children: [
                                                         const Text(""),
                                                         Text(
-                                                          "Rp. ${currencyFormatter.format(double.parse(cekTrans[index]['harga'])).replaceAll('.', ',')}",
+                                                          "Rp ${currencyFormatter.format(double.parse(cekTrans[index]['harga']))}",
                                                           style:
                                                               const TextStyle(
                                                             color: Color(

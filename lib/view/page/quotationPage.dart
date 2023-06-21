@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
@@ -133,6 +134,9 @@ class _QuotationPageState extends State<QuotationPage> {
                       controller: nomorKutipanC,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(9),
+                      ],
                     ),
                   ),
 
@@ -398,6 +402,9 @@ class _QuotationPageState extends State<QuotationPage> {
                                   maxLines: 1,
                                   controller: kodePosC,
                                   textInputAction: TextInputAction.next,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(5),
+                                  ],
                                 ),
                               ),
                             ],

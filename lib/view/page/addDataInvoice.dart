@@ -201,7 +201,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                     style: const TextStyle(color: Color(0xFF616161)),
                     cursorColor: const Color(0xFF737373),
                     decoration: const InputDecoration(
-                      hintText: 'Tanda Penerima Pembayaran',
+                      hintText: 'Tanda Terima Pembayaran',
                       hintStyle:
                           TextStyle(color: Color(0xFF8F8F8F), fontSize: 13),
                       focusedBorder: OutlineInputBorder(
@@ -361,6 +361,15 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                             width: double.infinity,
                             height: 50,
                             child: TextField(
+                              textCapitalization: TextCapitalization.characters,
+                              onChanged: (value) {
+                                namaBankC.value = namaBankC.value.copyWith(
+                                  text: value.toUpperCase(),
+                                  selection: TextSelection.fromPosition(
+                                    TextPosition(offset: value.length),
+                                  ),
+                                );
+                              },
                               style: const TextStyle(color: Color(0xFF616161)),
                               cursorColor: const Color(0xFF737373),
                               decoration: const InputDecoration(
@@ -449,6 +458,16 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                             width: double.infinity,
                             height: 50,
                             child: TextField(
+                              textCapitalization: TextCapitalization.characters,
+                              onChanged: (value) {
+                                namaRekeningC.value =
+                                    namaRekeningC.value.copyWith(
+                                  text: value.toUpperCase(),
+                                  selection: TextSelection.fromPosition(
+                                    TextPosition(offset: value.length),
+                                  ),
+                                );
+                              },
                               style: const TextStyle(color: Color(0xFF616161)),
                               cursorColor: const Color(0xFF737373),
                               decoration: const InputDecoration(
@@ -487,13 +506,10 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                       if (connectivityResult == ConnectivityResult.none) {
                         debugPrint("NO INTERNET");
                       } else {
-                        if (penerimaC.text == '' ||
+                        if (nomorInvoiceC.text == '' ||
                             keteranganC.text == '' ||
                             periodePembayaranC.text == '' ||
-                            valuePembayaran == null ||
-                            namaBankC.text == '' ||
-                            noRekeningC.text == '' ||
-                            namaRekeningC.text == '') {
+                            valuePembayaran == null) {
                           SnackbarWidget()
                               .snackbarError("Data Tidak boleh kosong");
                         } else {

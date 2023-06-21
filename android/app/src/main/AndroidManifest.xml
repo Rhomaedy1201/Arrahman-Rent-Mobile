@@ -2,7 +2,7 @@
     package="com.example.transportation_rent_mobile">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="transportation_rent_mobile"
+        android:label="GenQI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

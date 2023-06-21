@@ -63,28 +63,15 @@ class _HomePageState extends State<HomePage> {
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    crossAxisCount: isMobile ? 2 : 4,
+                    crossAxisCount: 2,
                     children: <Widget>[
-                      ItemHome(isMobile: isMobile).createSignature,
-                      ItemHome(isMobile: isMobile).createQuotation,
-                      ItemHome(isMobile: isMobile).searchDataQuotation,
-                      ItemHome(isMobile: isMobile).changeCompany,
+                      ItemHome().createSignature(isMobile),
+                      ItemHome().createQuotation(isMobile),
+                      ItemHome().searchDataQuotation(isMobile),
+                      ItemHome().changeCompany(isMobile),
                     ],
                   ),
                 ),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: GridView.builder(
-                //     shrinkWrap: true,
-                //     gridDelegate:
-                //         const SliverGridDelegateWithMaxCrossAxisExtent(
-                //       maxCrossAxisExtent: 200,
-                //     ),
-                //     itemBuilder: (context, index) {
-                //       return Container();
-                //     },
-                //   ),
-                // ),
               ],
             ),
           ),

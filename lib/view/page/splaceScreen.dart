@@ -33,11 +33,11 @@ class _SplaceScreenState extends State<SplaceScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 250,
-                height: 150,
+                width: 230,
+                height: 120,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/logo/icon_main.png'),
+                    image: AssetImage('assets/logo/icon_apk.png'),
                     fit: BoxFit.contain,
                   ),
                   // color: Colors.grey,

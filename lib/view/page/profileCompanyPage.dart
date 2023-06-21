@@ -107,8 +107,9 @@ class _ProfileCompanyPageState extends State<ProfileCompanyPage> {
                   Container(
                     height: 50,
                     width: 60,
-                    child:
-                        Image.network('$urlWeb/storage/${dataCompany['logo']}'),
+                    child: Image.network(
+                      '$urlWeb/public/storage/${dataCompany['logo']}',
+                    ),
                   ),
                   const SizedBox(height: 30),
                   const Text(

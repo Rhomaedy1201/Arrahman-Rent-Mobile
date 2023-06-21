@@ -174,7 +174,9 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
                                 '${widget.id_customer}',
                                 widget.nomorInvoiceC,
                                 widget.tanggal_invoiceC,
-                                widget.tandaPenerimaC,
+                                widget.tandaPenerimaC == ''
+                                    ? 'null'
+                                    : widget.tandaPenerimaC,
                                 widget.keteranganC,
                                 widget.periodePembayaranC,
                                 widget.metodePembayaranC,

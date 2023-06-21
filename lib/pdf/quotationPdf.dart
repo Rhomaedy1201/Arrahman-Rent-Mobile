@@ -67,13 +67,14 @@ class QuotationPdf {
     String originalDate = outputFormat.format(dateTime);
 
     // get image from api server
-    final url = '$urlWeb/storage/ttd/$img_ttd'; // Replace with your image URL
+    final url =
+        '$urlWeb/public/storage/ttd/$img_ttd'; // Replace with your image URL
     final response = await http.get(Uri.parse(url));
     final bytes_ttd = response.bodyBytes;
 
     // get image from api server
     final url_logo_company =
-        '$urlWeb/storage/$logo_company'; // Replace with your image URL
+        '$urlWeb/public/storage/$logo_company'; // Replace with your image URL
     final response_logo_company = await http.get(Uri.parse(url_logo_company));
     final bytes_logo_company = response_logo_company.bodyBytes;
 
@@ -105,7 +106,7 @@ class QuotationPdf {
     final tableTotal = [
       [
         'Total',
-        'Rp. ${currencyFormatter.format(double.parse(jmlSemua.toString())).replaceAll('.', ',')}',
+        'Rp ${currencyFormatter.format(double.parse(jmlSemua.toString()))}',
       ],
     ];
 
@@ -144,13 +145,17 @@ class QuotationPdf {
                 padding: const pw.EdgeInsets.all(5),
                 child: pw.Row(
                   children: [
-                    pw.Text(
-                      '${cekTrans[index]['tujuan']} dalam waktu ${cekTrans[index]['lama_penggunaan']}',
-                      style: const pw.TextStyle(
-                        color: PdfColors.black,
-                        fontSize: 10,
+                    pw.Container(
+                      width: 150,
+                      // color: PdfColors.amber,
+                      child: pw.Text(
+                        '${cekTrans[index]['tujuan']} dalam waktu ${cekTrans[index]['lama_penggunaan']}',
+                        style: const pw.TextStyle(
+                          color: PdfColors.black,
+                          fontSize: 10,
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -159,11 +164,15 @@ class QuotationPdf {
                 child: pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
-                    pw.Text(
-                      '${cekTrans[index]['tipe_mobil']}',
-                      style: const pw.TextStyle(
-                        color: PdfColors.black,
-                        fontSize: 10,
+                    pw.Container(
+                      width: 40,
+                      // color: PdfColors.amber,
+                      child: pw.Text(
+                        '${cekTrans[index]['tipe_mobil']}',
+                        style: const pw.TextStyle(
+                          color: PdfColors.black,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   ],
@@ -190,7 +199,7 @@ class QuotationPdf {
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
                     pw.Text(
-                      "Rp. ${currencyFormatter.format(double.parse(cekTrans[index]['harga'])).replaceAll('.', ',')}",
+                      "Rp ${currencyFormatter.format(double.parse(cekTrans[index]['harga']))}",
                       style: const pw.TextStyle(
                         color: PdfColors.black,
                         fontSize: 10,
@@ -289,7 +298,7 @@ class QuotationPdf {
             style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
           ),
           pw.SizedBox(width: 7),
-          pw.Text(komenar_customer == null ? "None." : komenar_customer),
+          pw.Text(komenar_customer == null ? "Tidak ada." : komenar_customer),
         ]),
         pw.SizedBox(height: 10),
         pw.Padding(
@@ -311,9 +320,9 @@ class QuotationPdf {
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [
-                  pw.SizedBox(
+                  pw.Container(
                     width: 200,
-                    height: 150,
+                    height: 100,
                     child: pw.Image(pw.MemoryImage(bytes_logo_company)),
                   ),
                 ],
@@ -418,8 +427,8 @@ class QuotationPdf {
                       children: [
                         pw.Text("Dengan hormat,"),
                         pw.Container(
-                          width: 70,
-                          height: 100,
+                          width: 100,
+                          height: 60,
                           // color: PdfColors.amber,
                           child: pw.Image(pw.MemoryImage(bytes_ttd)),
                         ),
