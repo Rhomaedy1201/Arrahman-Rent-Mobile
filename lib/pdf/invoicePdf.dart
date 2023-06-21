@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -493,6 +494,7 @@ class InvoicePdf {
                           pw.SizedBox(height: 5),
                           pw.Container(
                             width: 250,
+                            margin: pw.EdgeInsets.only(left: 24),
                             // color: PdfColors.red,
                             child: pw.Text(
                                 "No. Rekening : ${noRekening == 'null' ? '' : noRekening}"),
@@ -501,6 +503,7 @@ class InvoicePdf {
                           pw.Container(
                             width: 250,
                             // color: PdfColors.red,
+                            margin: pw.EdgeInsets.only(left: 24),
                             child: pw.Text(
                                 "a/n : ${nama_rekening == 'null' ? '' : nama_rekening}"),
                           ),
