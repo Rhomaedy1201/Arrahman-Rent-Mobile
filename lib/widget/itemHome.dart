@@ -15,7 +15,7 @@ class ItemHome {
         if (connectivityResult == ConnectivityResult.none) {
           debugPrint("NO INTERNET");
         } else {
-          // Get.to(SignaturePage());
+          Get.to(SignaturePage());
         }
       },
       child: Container(

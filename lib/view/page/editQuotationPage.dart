@@ -4,19 +4,46 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
 import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
-import 'package:http/http.dart' as http;
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
-class QuotationPage extends StatefulWidget {
-  const QuotationPage({super.key});
+class EditQuotationPage extends StatefulWidget {
+  String noQuotation,
+      kutipanSewa,
+      namaCustomer,
+      email,
+      namaCompanyCustomer,
+      kotaCustomer,
+      alamatCustomer,
+      kodePos,
+      tanggal,
+      noHp,
+      komentar;
+  int idUserTtd, idCustomer;
+  EditQuotationPage({
+    super.key,
+    required this.noQuotation,
+    required this.kutipanSewa,
+    required this.namaCustomer,
+    required this.email,
+    required this.namaCompanyCustomer,
+    required this.kotaCustomer,
+    required this.alamatCustomer,
+    required this.kodePos,
+    required this.tanggal,
+    required this.noHp,
+    required this.komentar,
+    required this.idUserTtd,
+    required this.idCustomer,
+  });
 
   @override
-  State<QuotationPage> createState() => _QuotationPageState();
+  State<EditQuotationPage> createState() => _EditQuotationPageState();
 }
 
-class _QuotationPageState extends State<QuotationPage> {
+class _EditQuotationPageState extends State<EditQuotationPage> {
   DateTime dtNow = DateTime.now();
   DateTime dateTime =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -24,6 +51,7 @@ class _QuotationPageState extends State<QuotationPage> {
   List<String> ttd_user = [
     "M.Fadil Adim",
   ];
+
   // declarate input
   var nomorKutipanC = TextEditingController(text: '');
   var kutipanPenyewaanC = TextEditingController(text: '');
@@ -36,12 +64,42 @@ class _QuotationPageState extends State<QuotationPage> {
   var tanggalC = null;
   var noHpC = TextEditingController(text: '');
   var komentarC = TextEditingController(text: '');
-  int? value_ttd;
+  int? value_ttd, idCustomer;
 
   @override
   void initState() {
     super.initState();
     getDataSignature();
+    // print(widget.idCustomer);
+    // print(widget.noQuotation);
+    // print(widget.kutipanSewa);
+    // print(widget.namaCustomer);
+    // print(widget.email);
+    // print(widget.namaCompanyCustomer);
+    // print(widget.kotaCustomer);
+    // print(widget.alamatCustomer);
+    // print(widget.kodePos);
+    // print(widget.tanggal);
+    // print(widget.noHp);
+    // print(widget.komentar);
+    // print(widget.idUserTtd);
+    setCustomer();
+  }
+
+  void setCustomer() {
+    idCustomer = widget.idCustomer;
+    nomorKutipanC.text = widget.noQuotation;
+    kutipanPenyewaanC.text = widget.kutipanSewa;
+    namaCustomerC.text = widget.namaCustomer;
+    emailC.text = widget.email;
+    namaPerusahaanC.text = widget.namaCompanyCustomer;
+    kotaC.text = widget.kotaCustomer;
+    alamatC.text = widget.alamatCustomer;
+    kodePosC.text = widget.kodePos;
+    dateTime = DateTime.parse(widget.tanggal);
+    noHpC.text = widget.noHp;
+    komentarC.text = widget.komentar == 'null' ? '' : widget.komentar;
+    value_ttd = widget.idUserTtd;
   }
 
   var isLoading = false;
@@ -82,7 +140,7 @@ class _QuotationPageState extends State<QuotationPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Buat Quotation",
+          "Edit Quotation",
           style: TextStyle(fontSize: 18),
         ),
         foregroundColor: Color(0xFF686868),
@@ -608,7 +666,8 @@ class _QuotationPageState extends State<QuotationPage> {
                         } else {
                           // Get.to(DataTransportationPage(id_customer: 4));
                           if (value_ttd != null) {
-                            QuotationController().postQuotation(
+                            QuotationController().updateQuotation(
+                              widget.idCustomer,
                               kutipanPenyewaanC.text,
                               namaCustomerC.text,
                               emailC.text,
@@ -629,12 +688,11 @@ class _QuotationPageState extends State<QuotationPage> {
                           }
                         }
                       },
-                      child: const Text('Simpan'),
+                      child: const Text('Update'),
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(1),
-                        overlayColor: MaterialStateProperty.all(Colors.green),
-                        backgroundColor:
-                            MaterialStateProperty.all(const Color(0xFF3FC633)),
+                        overlayColor: MaterialStateProperty.all(Colors.blue),
+                        backgroundColor: MaterialStateProperty.all(Colors.blue),
                       ),
                     ),
                   ),
@@ -648,7 +706,7 @@ class _QuotationPageState extends State<QuotationPage> {
   Future<DateTime?> pickerDate() => showDatePicker(
         context: context,
         initialDate: dateTime,
-        firstDate: DateTime.now().subtract(const Duration(days: 14)),
+        firstDate: DateTime(1900),
         lastDate: DateTime(2100),
       );
 }

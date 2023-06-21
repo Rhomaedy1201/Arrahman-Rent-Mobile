@@ -558,7 +558,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
   Future<DateTime?> pickerDate() => showDatePicker(
         context: context,
         initialDate: dateTime,
-        firstDate: DateTime(1900),
+        firstDate: DateTime.now().subtract(const Duration(days: 14)),
         lastDate: DateTime(2100),
       );
 }

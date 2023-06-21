@@ -60,6 +60,58 @@ class QuotationController extends GetxController {
     }
   }
 
+  void updateQuotation(
+    int idCustomer,
+    String kutipan_sewa,
+    String nama_cus,
+    String email,
+    String nama_perusahaan,
+    String kota,
+    String detail_alamat,
+    String pos,
+    String tanggal,
+    String no_quotation,
+    String no_hp,
+    String komentar,
+    String total_harga,
+    int id_user_ttd,
+  ) {
+    try {
+      QuotationProvider()
+          .updateQuotation(
+        idCustomer,
+        kutipan_sewa,
+        nama_cus,
+        email,
+        nama_perusahaan,
+        kota,
+        detail_alamat,
+        pos,
+        tanggal,
+        no_quotation,
+        no_hp,
+        komentar,
+        total_harga,
+        id_user_ttd,
+      )
+          .then((response) {
+        if (response.statusCode == 200) {
+          SnackbarWidget().snackbarSuccess("Berhasil Merubah Cutomer");
+          var getIdCus = response.body['data'];
+          Get.offAll(
+              DataTransportationPage(id_customer: idCustomer, isBack: 'false'));
+        } else {
+          SnackbarWidget().snackbarError(response.body['message']);
+          print(response.body);
+        }
+      });
+    } catch (e) {
+      // SnackbarWidget().snackbarError(
+      //     "Server Ada kendala atau mati, silahkan hubungi pihak pengembang");
+      print(e);
+    }
+  }
+
   Future<Map<String, dynamic>?> getTransportation(int id_customer) async {
     String url = "$baseUrl/transportation/$id_customer";
     var result;

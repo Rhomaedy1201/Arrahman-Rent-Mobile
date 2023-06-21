@@ -6,15 +6,18 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:transportation_rent_mobile/controllers/qutationController.dart';
 import 'package:transportation_rent_mobile/pdf/invoicePdf.dart';
 import 'package:transportation_rent_mobile/pdf/quotationPdf.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/history/searchDataHistory.dart';
 import 'package:transportation_rent_mobile/view/page/addDataInvoice.dart';
 import 'package:transportation_rent_mobile/view/page/addTransportationPage.dart';
+import 'package:transportation_rent_mobile/view/page/editQuotationPage.dart';
+import 'package:transportation_rent_mobile/view/page/editTransportation.dart';
 import 'package:transportation_rent_mobile/view/page/homePage.dart';
 import 'package:transportation_rent_mobile/widget/dataQuotation.dart';
+import 'package:transportation_rent_mobile/widget/materialDialogWidget.dart';
+import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class DataTransportationPage extends StatefulWidget {
   int id_customer;
@@ -52,7 +55,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     getQuotation(widget.id_customer);
     getTransportation(widget.id_customer);
     getCompany();
-    print(widget.isBack);
+    // print(widget.isBack);
   }
 
   // Get data Quotation
@@ -71,13 +74,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
       if (response.statusCode == 200) {
         dataQuotation = json.decode(response.body)['customer'][0];
         invoce = json.decode(response.body)['invoce'];
-        print(invoce[0]);
-        if (invoce.isNotEmpty) {
-          print("ada");
-        } else {
-          print("kosong");
-        }
-        print(invoce);
+        // print('CEK ${dataQuotation}');
       } else {
         print(response.body);
       }
@@ -105,16 +102,13 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
       if (response.statusCode == 200) {
         dataTransportation = json.decode(response.body)['data'];
         cekTrans = dataTransportation['transportation'];
+        print(cekTrans);
       } else {
         print(response.body);
       }
     } catch (e) {
       print(e);
     }
-    // dataTransportation =
-    //     (await QuotationController().getTransportation(id_customer))!;
-    // cekTrans = dataTransportation['transportation'];
-    // print("Data = $dataTransportation");
 
     setState(() {
       isLoading2 = false;
@@ -146,6 +140,31 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     });
   }
 
+  bool isLoadingDelete = false;
+  void deleteTransportation(int id) async {
+    setState(() {
+      isLoadingDelete = true;
+    });
+    String url = "$baseUrl/delete-transportation/$id";
+
+    try {
+      http.Response response = await http
+          .delete(Uri.parse(url), headers: {'Accept': 'application/json'});
+      if (response.statusCode == 200) {
+        var deleteTrans = json.decode(response.body);
+        SnackbarWidget().snackbarSuccess("Berhasil Menghapus Transportasi");
+        print(deleteTrans);
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      isLoadingDelete = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,6 +184,52 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
           },
           icon: Icon(Icons.arrow_back),
         ),
+        actions: [
+          invoce.isNotEmpty
+              ? Container()
+              : InkWell(
+                  onTap: () {
+                    Get.to(
+                      EditQuotationPage(
+                        noQuotation: '${dataQuotation['no_quotation']}',
+                        kutipanSewa: '${dataQuotation['kutipan_sewa']}',
+                        namaCustomer: '${dataQuotation['nama_customer']}',
+                        email: '${dataQuotation['email']}',
+                        namaCompanyCustomer:
+                            '${dataQuotation['nama_perusahaan']}',
+                        kotaCustomer: '${dataQuotation['kota']}',
+                        alamatCustomer: '${dataQuotation['nama_jalan']}',
+                        kodePos: '${dataQuotation['kode_pos']}',
+                        tanggal: '${dataQuotation['tanggal']}',
+                        noHp: '${dataQuotation['no_hp']}',
+                        komentar: '${dataQuotation['komentar']}',
+                        idUserTtd: int.parse('${dataQuotation['id_user']}'),
+                        idCustomer: int.parse('${dataQuotation['id']}'),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: const Color(0xFF5FC4F0),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: const Center(
+                        child: Text(
+                          "Edit\nQuotation",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+        ],
         foregroundColor: const Color(0xFF686868),
         backgroundColor: Colors.white,
         centerTitle: false,
@@ -398,198 +463,364 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                     ),
                                   ],
                                 )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: cekTrans.length,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        const SizedBox(height: 10),
-                                        Container(
-                                          width: double.infinity,
-                                          height: 128,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: const Color(0xFFB6B6B6)),
-                                            borderRadius:
-                                                BorderRadius.circular(7),
-                                            color: const Color(0xFFFFFFFF),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                width: double.infinity,
-                                                height: 31,
-                                                decoration: const BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(7),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  7)),
-                                                  color: Color(0xFFC3EDFF),
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 15),
-                                                      child: Text(
-                                                        '${cekTrans[index]['tipe_mobil']}'
-                                                            .toUpperCase(),
-                                                        style: const TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.w600,
+                              : isLoadingDelete
+                                  ? Center(
+                                      child: Container(
+                                        width: 60,
+                                        height: 60,
+                                        child: Lottie.asset(
+                                            'assets/lottie/loading.json'),
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: cekTrans.length,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return IgnorePointer(
+                                          ignoring:
+                                              invoce.isNotEmpty ? true : false,
+                                          child: Dismissible(
+                                            movementDuration: Duration.zero,
+                                            key: Key(cekTrans[index]['id']
+                                                .toString()),
+                                            direction:
+                                                DismissDirection.endToStart,
+                                            confirmDismiss: (direction) async {
+                                              return await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        'Hapus Transportasi'),
+                                                    content: Text(
+                                                        'Apakah Anda ingin menghapus ${cekTrans[index]['tipe_mobil']}?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: const Text(
+                                                            'Cancel'),
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop(
+                                                              false); // Return false to cancel dismissal
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                        child: const Text(
+                                                            'Delete'),
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop(
+                                                              true); // Return true to proceed with dismissal
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            onDismissed: invoce.isNotEmpty
+                                                ? null
+                                                : (direction) {
+                                                    deleteTransportation(
+                                                        cekTrans[index]['id']);
+                                                    setState(() {
+                                                      cekTrans.removeAt(index);
+                                                    });
+                                                  },
+                                            background: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              child: Icon(Icons.delete,
+                                                  color: Colors.white),
+                                              alignment: Alignment.centerRight,
+                                              padding: const EdgeInsets.only(
+                                                  right: 16),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                const SizedBox(height: 10),
+                                                Container(
+                                                  width: double.infinity,
+                                                  height: 128,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: const Color(
+                                                            0xFFB6B6B6)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            7),
+                                                    // color:
+                                                    //     const Color(0xFFFFFFFF),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        width: double.infinity,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          7),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          7)),
+                                                          color:
+                                                              Color(0xFFC3EDFF),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Container(
+                                                                      width:
+                                                                          200,
+                                                                      // color: Colors
+                                                                      //     .amber,
+                                                                      child:
+                                                                          Text(
+                                                                        '${cekTrans[index]['tipe_mobil']}'
+                                                                            .toUpperCase(),
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        maxLines:
+                                                                            1,
+                                                                      ),
+                                                                    ),
+                                                                    invoce.isNotEmpty
+                                                                        ? Container()
+                                                                        : SizedBox(
+                                                                            height:
+                                                                                21,
+                                                                            child:
+                                                                                ElevatedButton(
+                                                                              style: ElevatedButton.styleFrom(
+                                                                                primary: const Color(0xFF5FC4F0),
+                                                                                elevation: 0, // Remove elevation
+                                                                              ),
+                                                                              onPressed: () {
+                                                                                Get.to(
+                                                                                  EditTransportation(
+                                                                                    idTransportation: int.parse('${cekTrans[index]['id']}'),
+                                                                                    id_customer: int.parse('${dataQuotation['id']}'),
+                                                                                    tipeKendaraan: '${cekTrans[index]['tipe_mobil']}',
+                                                                                    lamaPenggunaan: '${cekTrans[index]['lama_penggunaan']}',
+                                                                                    jmlUnit: '${cekTrans[index]['jumlah']}',
+                                                                                    tanggalPenggunaan: '${cekTrans[index]['tanggal_penggunaan']}',
+                                                                                    harga: '${cekTrans[index]['harga']}',
+                                                                                    tujuanKendaraan: '${cekTrans[index]['tujuan']}',
+                                                                                  ),
+                                                                                );
+                                                                              },
+                                                                              child: Text(
+                                                                                'Edit Transportasi',
+                                                                                style: TextStyle(fontSize: 11),
+                                                                              ),
+                                                                            ),
+                                                                          )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                width: double.infinity,
-                                                height: 1,
-                                                color: const Color(0xFFB6B6B6),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 15,
-                                                  vertical: 8,
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: const [
-                                                        Text(
-                                                          "Tanggal Penggunaan",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF616161),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
+                                                      Container(
+                                                        width: double.infinity,
+                                                        height: 1,
+                                                        color: const Color(
+                                                            0xFFB6B6B6),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 15,
+                                                          vertical: 8,
                                                         ),
-                                                        Text(
-                                                          "9-Feb-2023",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF616161),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 3),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        const Text(
-                                                          "Lama Penggunaan",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF616161),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                const Text(
+                                                                  "Tanggal Penggunaan",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0xFF616161),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  '${cekTrans[index]['tanggal_penggunaan']}',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Color(
+                                                                        0xFF616161),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 3),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                const Text(
+                                                                  "Lama Penggunaan",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0xFF616161),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  cekTrans[
+                                                                          index]
+                                                                      [
+                                                                      'lama_penggunaan'],
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Color(
+                                                                        0xFF616161),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 3),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                const Text(
+                                                                  "Jumlah",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0xFF616161),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "${cekTrans[index]['jumlah']} Unit",
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Color(
+                                                                        0xFF616161),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 8),
+                                                            Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              height: 1,
+                                                              color: const Color(
+                                                                  0xFFB6B6B6),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 4),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                const Text(""),
+                                                                Text(
+                                                                  "Rp ${currencyFormatter.format(double.parse(cekTrans[index]['harga']))}",
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Color(
+                                                                        0xFF616161),
+                                                                    fontSize:
+                                                                        13,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
                                                         ),
-                                                        Text(
-                                                          cekTrans[index][
-                                                              'lama_penggunaan'],
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Color(
-                                                                0xFF616161),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 3),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        const Text(
-                                                          "Jumlah",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF616161),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          "${cekTrans[index]['jumlah']} Unit",
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Color(
-                                                                0xFF616161),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    Container(
-                                                      width: double.infinity,
-                                                      height: 1,
-                                                      color: const Color(
-                                                          0xFFB6B6B6),
-                                                    ),
-                                                    const SizedBox(height: 4),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        const Text(""),
-                                                        Text(
-                                                          "Rp ${currencyFormatter.format(double.parse(cekTrans[index]['harga']))}",
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Color(
-                                                                0xFF616161),
-                                                            fontSize: 13,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    )
-                                                  ],
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              )
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
+                                        );
+                                      },
+                                    ),
                         )
                       ],
                     ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:transportation_rent_mobile/view/page/editQuotationPage.dart';
 import 'package:transportation_rent_mobile/view/page/homePage.dart';
 
 class MaterialDialogWidget {
@@ -34,8 +35,8 @@ class MaterialDialogWidget {
             },
             text: 'Keluar',
             iconData: Icons.logout,
-            color: Color(0xFFDB372C),
-            textStyle: TextStyle(color: Colors.white),
+            color: const Color(0xFFDB372C),
+            textStyle: const TextStyle(color: Colors.white),
             iconColor: Colors.white,
           ),
         ]);
