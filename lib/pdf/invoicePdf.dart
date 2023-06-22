@@ -36,8 +36,8 @@ class InvoicePdf {
   ) async {
     final pdf = pw.Document();
     // get image logo company from api server
-    // final url_logo_company = '$urlWeb/public/storage/$logo_company';
-    final url_logo_company = '$urlWeb/storage/$logo_company';
+    final url_logo_company = '$urlWeb/public/storage/$logo_company';
+    // final url_logo_company = '$urlWeb/storage/$logo_company';
     final response_logo_company = await http.get(Uri.parse(url_logo_company));
     final bytes_logo_company = response_logo_company.bodyBytes;
 
@@ -52,8 +52,8 @@ class InvoicePdf {
     }
 
     // get image from api server
-    // final url = '$urlWeb/public/storage/$exportedImage';
-    final url = '$urlWeb/storage/$exportedImage';
+    final url = '$urlWeb/public/storage/$exportedImage';
+    // final url = '$urlWeb/storage/$exportedImage';
     final response = await http.get(Uri.parse(url));
     final bytes_ttd = response.bodyBytes;
 
