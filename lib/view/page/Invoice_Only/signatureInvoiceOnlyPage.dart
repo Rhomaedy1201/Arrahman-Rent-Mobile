@@ -1,47 +1,31 @@
+import 'dart:typed_data';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:signature/signature.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:transportation_rent_mobile/controllers/signatureInvoceController.dart';
-import 'package:transportation_rent_mobile/view/page/addDataInvoice.dart';
-import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
+import 'package:transportation_rent_mobile/controllers/signatureInvoiceOnlyController.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
-class SignatureInvocePage extends StatefulWidget {
-  String alamat_company,
-      kota_company,
-      noHp_company,
-      email_company,
-      nama_company;
-  int id_customer;
-  Uint8List? exportedImage;
+class SignatureInvoiceOnlyPage extends StatefulWidget {
   String nomorInvoiceC,
       tanggal_invoiceC,
       tandaPenerimaC,
       keteranganC,
       periodePembayaranC,
+      totalPembayaranC,
       metodePembayaranC,
       namaBankC,
       no_rekeningC,
       a_n_rekening;
-  //Invoce
-  SignatureInvocePage({
+  SignatureInvoiceOnlyPage({
     super.key,
-    required this.alamat_company,
-    required this.kota_company,
-    required this.noHp_company,
-    required this.email_company,
-    required this.nama_company,
-    required this.id_customer,
-    required this.exportedImage,
     //invoice
     required this.nomorInvoiceC,
     required this.tanggal_invoiceC,
     required this.tandaPenerimaC,
     required this.keteranganC,
     required this.periodePembayaranC,
+    required this.totalPembayaranC,
     required this.metodePembayaranC,
     required this.namaBankC,
     required this.no_rekeningC,
@@ -49,17 +33,32 @@ class SignatureInvocePage extends StatefulWidget {
   });
 
   @override
-  State<SignatureInvocePage> createState() => _SignatureInvocePageState();
+  State<SignatureInvoiceOnlyPage> createState() =>
+      _SignatureInvoiceOnlyPageState();
 }
 
-class _SignatureInvocePageState extends State<SignatureInvocePage> {
-  Uint8List? exportedImage;
+class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
+  Uint8List? ttd_image;
 
   SignatureController _controller = SignatureController(
-    penStrokeWidth: 3,
+    penStrokeWidth: 2,
     penColor: Colors.black,
     exportBackgroundColor: Colors.transparent,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint(widget.nomorInvoiceC);
+    debugPrint(widget.tanggal_invoiceC);
+    debugPrint(widget.tandaPenerimaC);
+    debugPrint(widget.periodePembayaranC);
+    debugPrint(widget.totalPembayaranC);
+    debugPrint(widget.metodePembayaranC);
+    debugPrint(widget.namaBankC);
+    debugPrint(widget.no_rekeningC);
+    debugPrint(widget.a_n_rekening);
+  }
 
   var print = false;
 
@@ -73,7 +72,7 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
         elevation: 0.8,
         centerTitle: false,
         title: const Text(
-          "Buat Tanda Tangan Invoce",
+          "Buat Tanda Tangan Invoice",
           style: TextStyle(
             fontSize: 17,
           ),
@@ -159,19 +158,18 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () async {
-                          exportedImage = await _controller.toPngBytes();
+                          ttd_image = await _controller.toPngBytes();
                           setState(() {});
                           final connectivityResult =
                               await (Connectivity().checkConnectivity());
                           if (connectivityResult == ConnectivityResult.none) {
                             debugPrint("NO INTERNET");
                           } else {
-                            if (exportedImage == null) {
+                            if (ttd_image == null) {
                               SnackbarWidget().snackbarError(
                                   "Silahkan Tambah Tanda Tangan Terlebih dahulu");
                             } else {
-                              SignatureInvoceController().addInvoce(
-                                '${widget.id_customer}',
+                              SignatureInvoiceOnlyController().addInvoceOnly(
                                 widget.nomorInvoiceC,
                                 widget.tanggal_invoiceC,
                                 widget.tandaPenerimaC == ''
@@ -179,16 +177,14 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
                                     : widget.tandaPenerimaC,
                                 widget.keteranganC,
                                 widget.periodePembayaranC,
+                                widget.totalPembayaranC,
                                 widget.metodePembayaranC,
                                 widget.namaBankC,
                                 widget.no_rekeningC,
                                 widget.a_n_rekening,
                                 nama_tanda_tanganC.text,
-                                exportedImage!,
+                                ttd_image!,
                               );
-                              setState(() {
-                                print = true;
-                              });
                             }
                           }
                         },

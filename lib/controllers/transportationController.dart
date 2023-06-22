@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:transportation_rent_mobile/providers/trasnsportationProvider.dart';
-import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
+import 'package:transportation_rent_mobile/view/page/Transportation/dataTransportasionPage.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class TransportationController {

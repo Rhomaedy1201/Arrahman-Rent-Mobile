@@ -20,7 +20,7 @@ class InvoicePdf {
     String phone_company,
     String email_company,
     String nama_company,
-    int id_customer,
+    //
     String nomor_invoice,
     String tanggal_invoice,
     String exportedImage,
@@ -32,11 +32,12 @@ class InvoicePdf {
     String noRekening,
     String nama_rekening,
     String nama_tanda_tangan,
-    String perusahaanCustomer,
+    int subTotalRp,
   ) async {
     final pdf = pw.Document();
     // get image logo company from api server
-    final url_logo_company = '$urlWeb/public/storage/$logo_company';
+    // final url_logo_company = '$urlWeb/public/storage/$logo_company';
+    final url_logo_company = '$urlWeb/storage/$logo_company';
     final response_logo_company = await http.get(Uri.parse(url_logo_company));
     final bytes_logo_company = response_logo_company.bodyBytes;
 
@@ -51,7 +52,8 @@ class InvoicePdf {
     }
 
     // get image from api server
-    final url = '$urlWeb/public/storage/$exportedImage';
+    // final url = '$urlWeb/public/storage/$exportedImage';
+    final url = '$urlWeb/storage/$exportedImage';
     final response = await http.get(Uri.parse(url));
     final bytes_ttd = response.bodyBytes;
 
@@ -63,21 +65,6 @@ class InvoicePdf {
 
     // number format
     final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
-
-    // get Api table data Transportation
-    late Map<String, dynamic> dataTransportation = {};
-    List<dynamic> cekTrans = [];
-    dataTransportation =
-        (await QuotationController().getTransportation(id_customer))!;
-    cekTrans = dataTransportation['transportation'];
-    var list1 = List<dynamic>.from(cekTrans);
-    // print("Data = ${cekTrans.length}");
-
-    // menjumlahkan seluruh harga
-    int subTotalRp = 0;
-    for (var i = 0; i < cekTrans.length; i++) {
-      subTotalRp += int.parse(cekTrans[i]['harga']);
-    }
 
     // PPN
     var resultPpn = (11 / 100) * subTotalRp;
@@ -563,7 +550,7 @@ class InvoicePdf {
 
     // Save the PDF to a file
     final output = await getTemporaryDirectory();
-    final file = File('${output.path}/Invoice-$perusahaanCustomer.pdf');
+    final file = File('${output.path}/Invoice.pdf');
     await file.writeAsBytes(await pdf.save());
     await OpenFile.open(file.path);
 

@@ -10,10 +10,10 @@ import 'package:transportation_rent_mobile/pdf/invoicePdf.dart';
 import 'package:transportation_rent_mobile/pdf/quotationPdf.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/history/searchDataHistory.dart';
-import 'package:transportation_rent_mobile/view/page/addDataInvoice.dart';
-import 'package:transportation_rent_mobile/view/page/addTransportationPage.dart';
-import 'package:transportation_rent_mobile/view/page/editQuotationPage.dart';
-import 'package:transportation_rent_mobile/view/page/editTransportation.dart';
+import 'package:transportation_rent_mobile/view/page/Invoice/addDataInvoice.dart';
+import 'package:transportation_rent_mobile/view/page/Transportation/addTransportationPage.dart';
+import 'package:transportation_rent_mobile/view/page/Quotation/editQuotationPage.dart';
+import 'package:transportation_rent_mobile/view/page/Transportation/editTransportation.dart';
 import 'package:transportation_rent_mobile/view/page/homePage.dart';
 import 'package:transportation_rent_mobile/widget/dataQuotation.dart';
 import 'package:transportation_rent_mobile/widget/materialDialogWidget.dart';
@@ -87,6 +87,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
   }
 
   // Get Data Transportation
+  int subTotalRp = 0;
   var isLoading2 = false;
   late Map<String, dynamic> dataTransportation = {};
   List<dynamic> cekTrans = [];
@@ -102,7 +103,11 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
       if (response.statusCode == 200) {
         dataTransportation = json.decode(response.body)['data'];
         cekTrans = dataTransportation['transportation'];
-        print(cekTrans);
+        // print(cekTrans);
+        for (var i = 0; i < cekTrans.length; i++) {
+          subTotalRp += int.parse(cekTrans[i]['harga']);
+        }
+        print("Sub Total = $subTotalRp");
       } else {
         print(response.body);
       }
@@ -114,6 +119,8 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
       isLoading2 = false;
     });
   }
+
+  // var list1 = List<dynamic>.from(cekTrans);
 
   // Get data Company for pdf Quotation and Invoice
   late Map<String, dynamic> dataCompany;
@@ -153,7 +160,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
       if (response.statusCode == 200) {
         var deleteTrans = json.decode(response.body);
         SnackbarWidget().snackbarSuccess("Berhasil Menghapus Transportasi");
-        print(deleteTrans);
+        // print(deleteTrans);
       } else {
         print(response.body);
       }
@@ -357,7 +364,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                     dataCompany['no_hp'],
                                     dataCompany['email'],
                                     dataCompany['nama_company'],
-                                    widget.id_customer,
+                                    //
                                     invoce[0]['nomor_invoice'],
                                     invoce[0]['tanggal_invoice'],
                                     invoce[0]['img_tanda_tangan'],
@@ -375,7 +382,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                         ? 'null'
                                         : invoce[0]['a_n_rekening'],
                                     invoce[0]['nama_tanda_tangan'],
-                                    dataQuotation['nama_perusahaan'],
+                                    subTotalRp,
                                   );
                                 } else {
                                   Get.to(addDataInvoice(

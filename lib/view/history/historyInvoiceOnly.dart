@@ -3,21 +3,20 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/history/menuHostory.dart';
-import 'package:transportation_rent_mobile/view/page/Transportation/dataTransportasionPage.dart';
-import 'package:transportation_rent_mobile/view/page/homePage.dart';
+import 'package:transportation_rent_mobile/view/page/Invoice_Only/detailDataInvoiceOnly.dart';
 
-class SearchDataHistory extends StatefulWidget {
-  const SearchDataHistory({super.key});
+class HistoryInvoiceOnly extends StatefulWidget {
+  const HistoryInvoiceOnly({super.key});
 
   @override
-  State<SearchDataHistory> createState() => _SearchDataHistoryState();
+  State<HistoryInvoiceOnly> createState() => _HistoryInvoiceOnlyState();
 }
 
-class _SearchDataHistoryState extends State<SearchDataHistory> {
+class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
   bool _isPopupVisible = false;
 
   DateTime dateTime =
@@ -33,31 +32,31 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
   @override
   void initState() {
     super.initState();
-    getCustomer();
+    getInvoceOnly();
   }
 
-  // Get data Quotation
+  // Get data Invoice
   var isLoading = false;
-  List<dynamic> dataCustomer = [];
+  List<dynamic> dataInvoice = [];
   List<dynamic> filteredList = [];
 
-  void getCustomer() async {
+  void getInvoceOnly() async {
     setState(() {
       isLoading = true;
     });
 
-    String url = "$baseUrl/customer";
+    String url = "$baseUrl/invoce-only";
     String urlFilter =
-        "$baseUrl/filter/customer?start_date=$startDate&end_date=$endDate";
+        "$baseUrl/filter/invoce-only?start_date=$startDate&end_date=$endDate";
 
     try {
       http.Response response = await http.get(
           Uri.parse(filter ? urlFilter : url),
           headers: {'Accept': 'application/json'});
       if (response.statusCode == 200) {
-        dataCustomer = json.decode(response.body)['data'];
-        filteredList = dataCustomer;
-        print('alskdjklasjd $dataCustomer');
+        dataInvoice = json.decode(response.body)['data'];
+        filteredList = dataInvoice;
+        print('alskdjklasjd $dataInvoice');
       } else {
         print(response.body);
       }
@@ -67,7 +66,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
       });
       print("Server $server");
     }
-    // print(dataCustomer['id']);
+    // print(dataInvoice['id']);
     setState(() {
       isLoading = false;
     });
@@ -75,19 +74,19 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
 
   void _filterData(String query) {
     setState(() {
-      filteredList = dataCustomer
-              .where((item) => item['nama_perusahaan']
+      filteredList = dataInvoice
+              .where((item) => item['nomor_invoice']
                   .toLowerCase()
                   .contains(query.toLowerCase()))
               .toList()
               .isEmpty
-          ? filteredList = dataCustomer
-              .where((item) => item['nama_customer']
+          ? filteredList = dataInvoice
+              .where((item) => item['metode_pembayaran']
                   .toLowerCase()
                   .contains(query.toLowerCase()))
               .toList()
-          : filteredList = dataCustomer
-              .where((item) => item['nama_perusahaan']
+          : filteredList = dataInvoice
+              .where((item) => item['nomor_invoice']
                   .toLowerCase()
                   .contains(query.toLowerCase()))
               .toList();
@@ -277,7 +276,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                         '${dateTime.year}-${dateTime.month}-${dateTime.day}';
                                     endDate =
                                         '${dateTime2.year}-${dateTime2.month}-${dateTime2.day}';
-                                    getCustomer();
+                                    getInvoceOnly();
                                     Get.back();
                                     setState(() {});
                                   }
@@ -298,14 +297,6 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                       ),
                     ],
                   ),
-
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     _togglePopupVisibility();
-                  //     Navigator.of(context).pop();
-                  //   },
-                  //   child: Text('Close'),
-                  // ),
                 ],
               );
             },
@@ -320,7 +311,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "History",
+          "History Invoice",
           style: TextStyle(fontSize: 18),
         ),
         leading: IconButton(
@@ -362,9 +353,8 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                             decoration: const InputDecoration(
                               prefixStyle:
                                   TextStyle(fontSize: 14, color: Colors.black),
-                              hintText:
-                                  'Berdasarkan nama customer atau perusahaan',
-                              labelText: "Cari Customer",
+                              hintText: 'Berdasarkan Nomor Invoice',
+                              labelText: "Cari Nomor Inovice",
                               labelStyle: TextStyle(fontSize: 13),
                               suffixIcon: Icon(Icons.search),
                               hintStyle: TextStyle(
@@ -435,7 +425,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    "History List",
+                    "History Invoice List",
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -455,7 +445,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                             ),
                           ],
                         )
-                      : dataCustomer.isEmpty
+                      : dataInvoice.isEmpty
                           ? const Column(
                               children: [
                                 SizedBox(height: 100),
@@ -505,14 +495,9 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                           debugPrint("NO INTERNET");
                                         } else {
                                           // to Data Transportation
-                                          Get.offAll(
-                                            DataTransportationPage(
-                                              id_customer: item['id'],
-                                              isBack: 'true',
-                                            ),
-                                          );
+                                          Get.offAll(DetailDataInvoiceOnly());
                                           search.text = '';
-                                          getCustomer();
+                                          getInvoceOnly();
                                         }
                                       },
                                       child: Column(
@@ -550,7 +535,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                                               .spaceBetween,
                                                       children: [
                                                         Text(
-                                                          item['nama_customer'],
+                                                          "Nomor Invoice # ${filteredList[index]['nomor_invoice']}",
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 12,
@@ -561,7 +546,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          item['tanggal'],
+                                                          "${filteredList[index]['tanggal_invoice']}",
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 10,
@@ -571,23 +556,11 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                                                 0xFF5E5E5E),
                                                           ),
                                                         ),
-                                                        // Container(
-                                                        //   width: 15,
-                                                        //   height: 65,
-                                                        //   decoration: const BoxDecoration(
-                                                        //     color: Color(0xFF00A7EF),
-                                                        //     borderRadius: BorderRadius.only(
-                                                        //       topLeft: Radius.circular(7),
-                                                        //       bottomLeft: Radius.circular(2),
-                                                        //       bottomRight: Radius.circular(20),
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
                                                       ],
                                                     ),
                                                     const SizedBox(height: 4),
                                                     Text(
-                                                      '${item['nama_perusahaan']}, ${item['kota']}',
+                                                      "Metode Pembayaran : ${filteredList[index]['metode_pembayaran']}",
                                                       style: const TextStyle(
                                                         fontSize: 11,
                                                         fontWeight:
@@ -619,7 +592,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          item['nama_lengkap'],
+                                                          "${filteredList[index]['nama_tanda_tangan']}",
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 10,

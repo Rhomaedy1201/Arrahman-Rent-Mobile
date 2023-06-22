@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:transportation_rent_mobile/providers/quotationProvider.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
-import 'package:transportation_rent_mobile/view/page/dataTransportasionPage.dart';
+import 'package:transportation_rent_mobile/view/page/Transportation/dataTransportasionPage.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class QuotationController extends GetxController {

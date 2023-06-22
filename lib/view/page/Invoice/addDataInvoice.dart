@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:transportation_rent_mobile/view/page/signatureInvocePage.dart';
+import 'package:transportation_rent_mobile/view/page/Invoice/signatureInvocePage.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class addDataInvoice extends StatefulWidget {
@@ -53,7 +53,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Nomor Invoice",
+          "Buat Invoice",
           style: TextStyle(fontSize: 18),
         ),
         foregroundColor: const Color(0xFF686868),
@@ -447,7 +447,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                           // Nama Bank
                           const SizedBox(height: 15),
                           const Text(
-                            "A.N Rekening",
+                            "a.n Rekening",
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,

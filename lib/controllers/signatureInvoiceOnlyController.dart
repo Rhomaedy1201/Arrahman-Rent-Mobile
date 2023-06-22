@@ -2,24 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
-import 'package:http/http.dart' as http;
-import 'package:transportation_rent_mobile/view/page/Transportation/dataTransportasionPage.dart';
-import 'package:transportation_rent_mobile/view/page/homePage.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
-class SignatureInvoceController {
+class SignatureInvoiceOnlyController {
   Rxn<File> imageFile = Rxn<File>();
-  String url = "$baseUrl/invoce/create";
+  String url = "$baseUrl/invoce-only/create";
 
-  Future<void> addInvoce(
-    String id_customer,
+  Future<void> addInvoceOnly(
     String nomor_invoice,
     String tanggal_invoice,
     String tanda_penerima_pembayaran,
     String keterangan,
     String periode_pembayaran,
+    String totalPembayaran,
     String metode_pembayaran,
     String nama_bank,
     String no_rekening,
@@ -31,12 +29,12 @@ class SignatureInvoceController {
       File imageFile = await _convertBytesToFile(tanda_tangan);
       // Make API post request
       var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.fields['id_customer'] = id_customer as String;
       request.fields['nomor_invoice'] = nomor_invoice;
       request.fields['tanggal_invoice'] = tanggal_invoice;
       request.fields['tanda_penerima_pembayaran'] = tanda_penerima_pembayaran;
       request.fields['keterangan'] = keterangan;
       request.fields['periode_pembayaran'] = periode_pembayaran;
+      request.fields['total_pembayaran'] = totalPembayaran;
       request.fields['metode_pembayaran'] = metode_pembayaran;
       request.fields['nama_bank'] = nama_bank;
       request.fields['no_rekening'] = no_rekening;
@@ -51,20 +49,18 @@ class SignatureInvoceController {
       var responseBody = json.decode(responseString);
       if (response.statusCode == 200) {
         SnackbarWidget().snackbarSuccess("Berhasil Menambahkan Invoce");
-        Get.offAll(
-          DataTransportationPage(
-            id_customer: int.parse(id_customer),
-            isBack: 'false',
-          ),
-        );
+        // Get.offAll(
+        //   DataTransportationPage(
+        //     id_customer: int.parse(id_customer),
+        //     isBack: 'false',
+        //   ),
+        // );
         print(responseString);
       } else {
         SnackbarWidget().snackbarError(responseBody['message']);
         print(responseBody['message']);
       }
     } catch (e) {
-      // SnackbarWidget().snackbarError(
-      //     "Server Ada kendala atau mati, silahkan hubungi pihak pengembang");
       print(e);
     }
   }
