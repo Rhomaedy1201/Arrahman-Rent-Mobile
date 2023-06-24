@@ -11,29 +11,49 @@ import 'package:transportation_rent_mobile/view/history/historyInvoiceOnly.dart'
 import 'package:transportation_rent_mobile/widget/itemDetailInvoice.dart';
 
 class DetailDataInvoiceOnly extends StatefulWidget {
-  const DetailDataInvoiceOnly({super.key});
+  int id;
+  DetailDataInvoiceOnly({super.key, required this.id});
 
   @override
   State<DetailDataInvoiceOnly> createState() => _DetailDataInvoiceOnlyState();
 }
 
 class _DetailDataInvoiceOnlyState extends State<DetailDataInvoiceOnly> {
+  bool _isPopupVisible = false;
   @override
   void initState() {
     super.initState();
-    getInvoceOnly(1);
-    getCompany();
+    getInvoceOnlyAndCompay(widget.id);
   }
 
   // Get data Invoice
   int subTotalRp = 0;
   var isLoading = false;
   List<dynamic> dataInvoice = [];
+  late Map<String, dynamic> dataCompany;
 
-  void getInvoceOnly(int id) async {
-    setState(() {
-      isLoading = true;
-    });
+  void getInvoceOnlyAndCompay(int id) async {
+    if (mounted)
+      setState(() {
+        isLoading = true;
+      });
+
+    // get data company
+    String url2 = "$baseUrl/data-company";
+    try {
+      http.Response response = await http
+          .get(Uri.parse(url2), headers: {'Accept': 'application/json'});
+      if (response.statusCode == 200) {
+        dataCompany = json.decode(response.body)['data'][0];
+        print(dataCompany);
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    // get invoice only
     String url = "$baseUrl/invoce-only/$id";
     try {
       http.Response response = await http
@@ -50,35 +70,180 @@ class _DetailDataInvoiceOnlyState extends State<DetailDataInvoiceOnly> {
     } catch (e) {
       print("Server");
     }
-    // print(dataInvoice['id']);
-    setState(() {
-      isLoading = false;
-    });
+
+    if (mounted)
+      setState(() {
+        isLoading = false;
+      });
   }
 
-  var isLoading2 = false;
-  late Map<String, dynamic> dataCompany;
-  void getCompany() async {
+  // Filter
+  void _togglePopupVisibility(
+    String logo_company,
+    String alamat_company,
+    String kota_company,
+    String phone_company,
+    String email_company,
+    String nama_company,
+    //
+    String nomor_invoice,
+    String tanggal_invoice,
+    String exportedImage,
+    String tanda_penerima_pembayaran,
+    String keterangan,
+    String periode_pembayaran,
+    String metode_pembayaran,
+    String nama_bank,
+    String noRekening,
+    String nama_rekening,
+    String nama_tanda_tangan,
+    int subTotalRp,
+  ) {
     setState(() {
-      isLoading2 = true;
+      _isPopupVisible = !_isPopupVisible;
     });
-    String url = "$baseUrl/data-company";
-
-    try {
-      http.Response response = await http
-          .get(Uri.parse(url), headers: {'Accept': 'application/json'});
-      if (response.statusCode == 200) {
-        dataCompany = json.decode(response.body)['data'][0];
-        print(dataCompany);
-      } else {
-        print(response.body);
-      }
-    } catch (e) {
-      print(e);
+    if (_isPopupVisible) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                actions: [
+                  Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 45,
+                        color: const Color(0xFFD0EDF9),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Pilih",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _isPopupVisible = !_isPopupVisible;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                      width: 25,
+                                      height: 25,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFFFFC0C0),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFED6C6C),
+                                ),
+                                onPressed: () {
+                                  InvoicePdf().printPdf(
+                                    logo_company,
+                                    alamat_company,
+                                    kota_company,
+                                    phone_company,
+                                    email_company,
+                                    nama_company,
+                                    nomor_invoice,
+                                    tanggal_invoice,
+                                    exportedImage,
+                                    tanda_penerima_pembayaran,
+                                    keterangan,
+                                    periode_pembayaran,
+                                    metode_pembayaran,
+                                    nama_bank,
+                                    noRekening,
+                                    nama_rekening,
+                                    nama_tanda_tangan,
+                                    subTotalRp,
+                                    true,
+                                  );
+                                },
+                                label: const Text("Generate Invoice"),
+                                icon: const Icon(Icons.picture_as_pdf),
+                              ),
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFED6C6C),
+                                ),
+                                onPressed: () {
+                                  InvoicePdf().printPdf(
+                                    logo_company,
+                                    alamat_company,
+                                    kota_company,
+                                    phone_company,
+                                    email_company,
+                                    nama_company,
+                                    nomor_invoice,
+                                    tanggal_invoice,
+                                    exportedImage,
+                                    tanda_penerima_pembayaran,
+                                    keterangan,
+                                    periode_pembayaran,
+                                    metode_pembayaran,
+                                    nama_bank,
+                                    noRekening,
+                                    nama_rekening,
+                                    nama_tanda_tangan,
+                                    subTotalRp,
+                                    false,
+                                  );
+                                },
+                                label: const Text("Share Invoice"),
+                                icon: const Icon(Icons.share),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
     }
-    setState(() {
-      isLoading2 = false;
-    });
   }
 
   @override
@@ -108,85 +273,84 @@ class _DetailDataInvoiceOnlyState extends State<DetailDataInvoiceOnly> {
                   child: Lottie.asset('assets/lottie/loading.json'),
                 ),
               )
-            : isLoading2
-                ? Center(
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      child: Lottie.asset('assets/lottie/loading.json'),
-                    ),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: dataInvoice.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 15),
-                        child: Column(
-                          children: [
-                            ItemDetailInvoice().item_detail_invoice(
-                              dataInvoice[index]['nomor_invoice'],
-                              dataInvoice[index]['tanggal_invoice'],
-                              dataInvoice[index]['total_pembayaran'],
-                              dataInvoice[index]['periode_pembayaran'],
-                              dataInvoice[index]['metode_pembayaran'],
-                              dataInvoice[index]['nama_bank'],
-                              dataInvoice[index]['nama_tanda_tangan'],
-                            ),
-                            const SizedBox(height: 15),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 40,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFED6C6C),
-                                ),
-                                onPressed: () async {
-                                  final connectivityResult =
-                                      await (Connectivity()
-                                          .checkConnectivity());
-                                  if (connectivityResult ==
-                                      ConnectivityResult.none) {
-                                    print("NO INTERNET");
-                                  } else {
-                                    InvoicePdf().printPdf(
-                                      dataCompany['logo'],
-                                      dataCompany['alamat'],
-                                      dataCompany['kota'],
-                                      dataCompany['no_hp'],
-                                      dataCompany['email'],
-                                      dataCompany['nama_company'],
-                                      //
-                                      dataInvoice[index]['nomor_invoice'],
-                                      dataInvoice[index]['tanggal_invoice'],
-                                      dataInvoice[index]['img_tanda_tangan'],
-                                      dataInvoice[index]
-                                          ['tanda_penerima_pembayaran'],
-                                      dataInvoice[index]['keterangan'],
-                                      dataInvoice[index]['periode_pembayaran'],
-                                      dataInvoice[index]['metode_pembayaran'],
-                                      dataInvoice[index]['nama_bank'],
-                                      dataInvoice[index]['no_rekening'],
-                                      dataInvoice[index]['a_n_rekening'],
-                                      dataInvoice[index]['nama_tanda_tangan'],
-                                      subTotalRp,
-                                    );
-                                  }
-                                },
-                                child: const Text(
-                                  "Generate Invoice",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: dataInvoice.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    child: Column(
+                      children: [
+                        ItemDetailInvoice().item_detail_invoice(
+                          dataInvoice[index]['nomor_invoice'],
+                          dataInvoice[index]['tanggal_invoice'],
+                          dataInvoice[index]['total_pembayaran'],
+                          dataInvoice[index]['periode_pembayaran'],
+                          dataInvoice[index]['metode_pembayaran'],
+                          dataInvoice[index]['nama_bank'] == null
+                              ? "kosong"
+                              : dataInvoice[index]['nama_bank'],
+                          dataInvoice[index]['nama_tanda_tangan'],
                         ),
-                      );
-                    },
-                  ));
+                        const SizedBox(height: 15),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 40,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFED6C6C),
+                            ),
+                            onPressed: () async {
+                              final connectivityResult =
+                                  await (Connectivity().checkConnectivity());
+                              if (connectivityResult ==
+                                  ConnectivityResult.none) {
+                                print("NO INTERNET");
+                              } else {
+                                _togglePopupVisibility(
+                                  dataCompany['logo'],
+                                  dataCompany['alamat'],
+                                  dataCompany['kota'],
+                                  dataCompany['no_hp'],
+                                  dataCompany['email'],
+                                  dataCompany['nama_company'],
+                                  //
+                                  dataInvoice[index]['nomor_invoice'],
+                                  dataInvoice[index]['tanggal_invoice'],
+                                  dataInvoice[index]['img_tanda_tangan'],
+                                  dataInvoice[index]
+                                      ['tanda_penerima_pembayaran'],
+                                  dataInvoice[index]['keterangan'],
+                                  dataInvoice[index]['periode_pembayaran'],
+                                  dataInvoice[index]['metode_pembayaran'],
+                                  dataInvoice[index]['nama_bank'] == null
+                                      ? 'null'
+                                      : dataInvoice[index]['nama_bank'],
+                                  dataInvoice[index]['no_rekening'] == null
+                                      ? 'null'
+                                      : dataInvoice[index]['no_rekening'],
+                                  dataInvoice[index]['a_n_rekening'] == null
+                                      ? 'null'
+                                      : dataInvoice[index]['a_n_rekening'],
+                                  dataInvoice[index]['nama_tanda_tangan'],
+                                  subTotalRp,
+                                );
+                              }
+                            },
+                            child: const Text(
+                              "Generate Invoice",
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ));
   }
 }

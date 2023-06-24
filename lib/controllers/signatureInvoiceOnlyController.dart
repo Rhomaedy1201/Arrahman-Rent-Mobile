@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
+import 'package:transportation_rent_mobile/view/history/historyInvoiceOnly.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
 class SignatureInvoiceOnlyController {
@@ -49,12 +50,7 @@ class SignatureInvoiceOnlyController {
       var responseBody = json.decode(responseString);
       if (response.statusCode == 200) {
         SnackbarWidget().snackbarSuccess("Berhasil Menambahkan Invoce");
-        // Get.offAll(
-        //   DataTransportationPage(
-        //     id_customer: int.parse(id_customer),
-        //     isBack: 'false',
-        //   ),
-        // );
+        Get.offAll(HistoryInvoiceOnly());
         print(responseString);
       } else {
         SnackbarWidget().snackbarError(responseBody['message']);

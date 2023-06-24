@@ -177,7 +177,7 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
                                     : widget.tandaPenerimaC,
                                 widget.keteranganC,
                                 widget.periodePembayaranC,
-                                widget.totalPembayaranC,
+                                '${widget.totalPembayaranC.replaceAll(',', '')}',
                                 widget.metodePembayaranC,
                                 widget.namaBankC,
                                 widget.no_rekeningC,

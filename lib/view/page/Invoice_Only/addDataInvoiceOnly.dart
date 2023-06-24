@@ -553,31 +553,10 @@ class _AddDataInvoiceOnlyState extends State<AddDataInvoiceOnly> {
                               a_n_rekening: namaRekeningC.text,
                             ),
                           );
-                          // Get.to(SignatureInvocePage(
-                          //   alamat_company: widget.alamat_company,
-                          //   kota_company: widget.kota_company,
-                          //   noHp_company: widget.noHp_company,
-                          //   email_company: widget.email_company,
-                          //   nama_company: widget.nama_company,
-                          //   id_customer: widget.id_customer,
-                          //   exportedImage: widget.exportedImage == null
-                          //       ? null
-                          //       : widget.exportedImage,
-                          //   nomorInvoiceC: nomorInvoiceC.text,
-                          //   tanggal_invoiceC:
-                          //       "${dateTime.year}-${dateTime.month}-${dateTime.day}",
-                          //   tandaPenerimaC: penerimaC.text,
-                          //   keteranganC: keteranganC.text,
-                          //   periodePembayaranC: periodePembayaranC.text,
-                          //   metodePembayaranC: valuePembayaran!,
-                          //   namaBankC: namaBankC.text,
-                          //   no_rekeningC: noRekeningC.text,
-                          //   a_n_rekening: namaRekeningC.text,
-                          // ));
                         }
                       }
                     },
-                    child: Text('Selajutnya', style: TextStyle(fontSize: 13)),
+                    child: Text('Selanjutnya', style: TextStyle(fontSize: 13)),
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all<double>(1),
                       overlayColor:

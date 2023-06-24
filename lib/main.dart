@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return GetMaterialApp(
+    return const GetMaterialApp(
       defaultTransition: Transition.size,
       debugShowCheckedModeBanner: false,
       title: 'Transportastion Rent',

@@ -42,9 +42,10 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
   List<dynamic> filteredList = [];
 
   void getCustomer() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = true;
+      });
 
     String url = "$baseUrl/customer";
     String urlFilter =
@@ -62,37 +63,40 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
         print(response.body);
       }
     } catch (e) {
-      setState(() {
-        server = e.toString();
-      });
+      if (mounted)
+        setState(() {
+          server = e.toString();
+        });
       print("Server $server");
     }
     // print(dataCustomer['id']);
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = false;
+      });
   }
 
   void _filterData(String query) {
-    setState(() {
-      filteredList = dataCustomer
-              .where((item) => item['nama_perusahaan']
-                  .toLowerCase()
-                  .contains(query.toLowerCase()))
-              .toList()
-              .isEmpty
-          ? filteredList = dataCustomer
-              .where((item) => item['nama_customer']
-                  .toLowerCase()
-                  .contains(query.toLowerCase()))
-              .toList()
-          : filteredList = dataCustomer
-              .where((item) => item['nama_perusahaan']
-                  .toLowerCase()
-                  .contains(query.toLowerCase()))
-              .toList();
-      // print(filteredList);
-    });
+    if (mounted)
+      setState(() {
+        filteredList = dataCustomer
+                .where((item) => item['nama_perusahaan']
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+                .toList()
+                .isEmpty
+            ? filteredList = dataCustomer
+                .where((item) => item['nama_customer']
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+                .toList()
+            : filteredList = dataCustomer
+                .where((item) => item['nama_perusahaan']
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+                .toList();
+        // print(filteredList);
+      });
   }
 
   // Filter

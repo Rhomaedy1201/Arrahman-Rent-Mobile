@@ -41,9 +41,10 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
   List<dynamic> filteredList = [];
 
   void getInvoceOnly() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = true;
+      });
 
     String url = "$baseUrl/invoce-only";
     String urlFilter =
@@ -66,32 +67,34 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
       });
       print("Server $server");
     }
+    if (mounted)
+      setState(() {
+        isLoading = false;
+      });
     // print(dataInvoice['id']);
-    setState(() {
-      isLoading = false;
-    });
   }
 
   void _filterData(String query) {
-    setState(() {
-      filteredList = dataInvoice
-              .where((item) => item['nomor_invoice']
-                  .toLowerCase()
-                  .contains(query.toLowerCase()))
-              .toList()
-              .isEmpty
-          ? filteredList = dataInvoice
-              .where((item) => item['metode_pembayaran']
-                  .toLowerCase()
-                  .contains(query.toLowerCase()))
-              .toList()
-          : filteredList = dataInvoice
-              .where((item) => item['nomor_invoice']
-                  .toLowerCase()
-                  .contains(query.toLowerCase()))
-              .toList();
-      // print(filteredList);
-    });
+    if (mounted)
+      setState(() {
+        filteredList = dataInvoice
+                .where((item) => item['nomor_invoice']
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+                .toList()
+                .isEmpty
+            ? filteredList = dataInvoice
+                .where((item) => item['metode_pembayaran']
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+                .toList()
+            : filteredList = dataInvoice
+                .where((item) => item['nomor_invoice']
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+                .toList();
+        // print(filteredList);
+      });
   }
 
   // Filter
@@ -495,7 +498,9 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
                                           debugPrint("NO INTERNET");
                                         } else {
                                           // to Data Transportation
-                                          Get.offAll(DetailDataInvoiceOnly());
+                                          Get.offAll(DetailDataInvoiceOnly(
+                                            id: item['id'],
+                                          ));
                                           search.text = '';
                                           getInvoceOnly();
                                         }

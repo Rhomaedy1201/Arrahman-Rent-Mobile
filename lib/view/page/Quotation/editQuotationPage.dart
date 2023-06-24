@@ -105,9 +105,10 @@ class _EditQuotationPageState extends State<EditQuotationPage> {
   var isLoading = false;
   List<dynamic> result = [];
   void getDataSignature() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = true;
+      });
     String url = '$baseUrl/user';
     // response
     try {
@@ -129,9 +130,10 @@ class _EditQuotationPageState extends State<EditQuotationPage> {
     }
 
     // loding off
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = false;
+      });
   }
 
   @override

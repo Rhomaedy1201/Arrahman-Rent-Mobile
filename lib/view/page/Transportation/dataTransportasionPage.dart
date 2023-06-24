@@ -30,22 +30,7 @@ class DataTransportationPage extends StatefulWidget {
 }
 
 class _DataTransportationPageState extends State<DataTransportationPage> {
-  List<String> nameData = [
-    "Nama",
-    "No Hanphone",
-    "Nama Perusahaan",
-    "Kota/Pos",
-    "Alamat",
-    "Email",
-  ];
-  List<String> dataQuotation2 = [
-    "Ibu Karina",
-    "+62 (31) 8431 699",
-    "PT Philip Morris Sampoerna",
-    "Surabaya,60293",
-    "Jl. Rungkut Industri Raya No.18",
-    "karina.purwiyono@contracted.sampoerna.com",
-  ];
+  bool _isPopupVisible = false;
 
   final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
 
@@ -63,9 +48,10 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
   late Map<String, dynamic> dataQuotation;
   List<dynamic> invoce = [];
   void getQuotation(int id_customer) async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = true;
+      });
     String url = "$baseUrl/transportation/$id_customer";
 
     try {
@@ -81,9 +67,10 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     } catch (e) {
       print(e);
     }
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = false;
+      });
   }
 
   // Get Data Transportation
@@ -92,10 +79,11 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
   late Map<String, dynamic> dataTransportation = {};
   List<dynamic> cekTrans = [];
   void getTransportation(int id_customer) async {
+    if (mounted)
+      setState(() {
+        isLoading2 = true;
+      });
     String url = "$baseUrl/transportation/$id_customer";
-    setState(() {
-      isLoading2 = true;
-    });
 
     try {
       http.Response response = await http
@@ -115,9 +103,10 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
       print(e);
     }
 
-    setState(() {
-      isLoading2 = false;
-    });
+    if (mounted)
+      setState(() {
+        isLoading2 = false;
+      });
   }
 
   // var list1 = List<dynamic>.from(cekTrans);
@@ -125,9 +114,10 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
   // Get data Company for pdf Quotation and Invoice
   late Map<String, dynamic> dataCompany;
   void getCompany() async {
-    setState(() {
-      isLoading2 = true;
-    });
+    if (mounted)
+      setState(() {
+        isLoading2 = true;
+      });
     String url = "$baseUrl/data-company";
 
     try {
@@ -142,16 +132,18 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     } catch (e) {
       print(e);
     }
-    setState(() {
-      isLoading2 = false;
-    });
+    if (mounted)
+      setState(() {
+        isLoading2 = false;
+      });
   }
 
   bool isLoadingDelete = false;
   void deleteTransportation(int id) async {
-    setState(() {
-      isLoadingDelete = true;
-    });
+    if (mounted)
+      setState(() {
+        isLoadingDelete = true;
+      });
     String url = "$baseUrl/delete-transportation/$id";
 
     try {
@@ -167,9 +159,179 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     } catch (e) {
       print(e);
     }
+    if (mounted)
+      setState(() {
+        isLoadingDelete = false;
+      });
+  }
+
+  // Filter
+  void _togglePopupVisibility(
+    String logo_company,
+    String alamat_company,
+    String kota_company,
+    String phone_company,
+    String email_company,
+    String nama_company,
+    //
+    String nomor_invoice,
+    String tanggal_invoice,
+    String exportedImage,
+    String tanda_penerima_pembayaran,
+    String keterangan,
+    String periode_pembayaran,
+    String metode_pembayaran,
+    String nama_bank,
+    String noRekening,
+    String nama_rekening,
+    String nama_tanda_tangan,
+    int subTotalRp,
+  ) {
     setState(() {
-      isLoadingDelete = false;
+      _isPopupVisible = !_isPopupVisible;
     });
+    if (_isPopupVisible) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                actions: [
+                  Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 45,
+                        color: const Color(0xFFD0EDF9),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Pilih",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _isPopupVisible = !_isPopupVisible;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                      width: 25,
+                                      height: 25,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFFFFC0C0),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFED6C6C),
+                                ),
+                                onPressed: () {
+                                  InvoicePdf().printPdf(
+                                    logo_company,
+                                    alamat_company,
+                                    kota_company,
+                                    phone_company,
+                                    email_company,
+                                    nama_company,
+                                    nomor_invoice,
+                                    tanggal_invoice,
+                                    exportedImage,
+                                    tanda_penerima_pembayaran,
+                                    keterangan,
+                                    periode_pembayaran,
+                                    metode_pembayaran,
+                                    nama_bank,
+                                    noRekening,
+                                    nama_rekening,
+                                    nama_tanda_tangan,
+                                    subTotalRp,
+                                    true,
+                                  );
+                                },
+                                label: const Text("Generate Invoice"),
+                                icon: const Icon(Icons.picture_as_pdf),
+                              ),
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFED6C6C),
+                                ),
+                                onPressed: () {
+                                  InvoicePdf().printPdf(
+                                    logo_company,
+                                    alamat_company,
+                                    kota_company,
+                                    phone_company,
+                                    email_company,
+                                    nama_company,
+                                    nomor_invoice,
+                                    tanggal_invoice,
+                                    exportedImage,
+                                    tanda_penerima_pembayaran,
+                                    keterangan,
+                                    periode_pembayaran,
+                                    metode_pembayaran,
+                                    nama_bank,
+                                    noRekening,
+                                    nama_rekening,
+                                    nama_tanda_tangan,
+                                    subTotalRp,
+                                    false,
+                                  );
+                                },
+                                label: const Text("Share Invoice"),
+                                icon: const Icon(Icons.share),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -355,9 +517,9 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                   ConnectivityResult.none) {
                                 print("NO INTERNET");
                               } else {
-                                //print invoice pdf
+                                // print invoice pdf
                                 if (invoce.isNotEmpty) {
-                                  InvoicePdf().printPdf(
+                                  _togglePopupVisibility(
                                     dataCompany['logo'],
                                     dataCompany['alamat'],
                                     dataCompany['kota'],

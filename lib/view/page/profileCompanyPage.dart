@@ -52,9 +52,10 @@ class _ProfileCompanyPageState extends State<ProfileCompanyPage> {
   late Map<String, dynamic> dataCompany;
   var isLoading = false;
   void getCompany() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = true;
+      });
     String url = "$baseUrl/data-company";
 
     try {
@@ -69,9 +70,10 @@ class _ProfileCompanyPageState extends State<ProfileCompanyPage> {
     } catch (e) {
       print(e);
     }
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted)
+      setState(() {
+        isLoading = false;
+      });
   }
 
   List listCompany = [];

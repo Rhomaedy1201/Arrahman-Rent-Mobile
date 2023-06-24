@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
-import 'package:transportation_rent_mobile/controllers/qutationController.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:transportation_rent_mobile/utils/convertNumberToLatters.dart';
@@ -33,6 +32,7 @@ class InvoicePdf {
     String nama_rekening,
     String nama_tanda_tangan,
     int subTotalRp,
+    bool generate,
   ) async {
     final pdf = pw.Document();
     // get image logo company from api server
@@ -550,10 +550,20 @@ class InvoicePdf {
 
     // Save the PDF to a file
     final output = await getTemporaryDirectory();
-    final file = File('${output.path}/Invoice.pdf');
+    final filePath1 = '${output.path}/Invoice.pdf';
+    final file = File(filePath1);
     await file.writeAsBytes(await pdf.save());
-    await OpenFile.open(file.path);
 
+    if (generate == false) {
+      String pdfFilePath = await filePath1;
+      sharePDF(pdfFilePath);
+    } else {
+      await OpenFile.open(file.path);
+    }
     print('PDF saved to ${file.path}');
+  }
+
+  void sharePDF(String filePath) {
+    Share.shareFiles([filePath], text: 'Sharing PDF');
   }
 }
