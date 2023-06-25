@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
+import 'package:transportation_rent_mobile/controllers/editInvoiceOnlyController.dart';
 import 'package:transportation_rent_mobile/controllers/signatureInvoiceOnlyController.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
@@ -16,10 +17,15 @@ class SignatureInvoiceOnlyPage extends StatefulWidget {
       metodePembayaranC,
       namaBankC,
       no_rekeningC,
-      a_n_rekening;
+      a_n_rekening,
+      namaTtd,
+      fotoTtd;
+  int id;
+
   SignatureInvoiceOnlyPage({
     super.key,
     //invoice
+    required this.id,
     required this.nomorInvoiceC,
     required this.tanggal_invoiceC,
     required this.tandaPenerimaC,
@@ -30,6 +36,8 @@ class SignatureInvoiceOnlyPage extends StatefulWidget {
     required this.namaBankC,
     required this.no_rekeningC,
     required this.a_n_rekening,
+    required this.namaTtd,
+    required this.fotoTtd,
   });
 
   @override
@@ -58,6 +66,13 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
     debugPrint(widget.namaBankC);
     debugPrint(widget.no_rekeningC);
     debugPrint(widget.a_n_rekening);
+    setNameFromEdit();
+  }
+
+  void setNameFromEdit() {
+    setState(() {
+      nama_tanda_tanganC.text = widget.namaTtd == 'null' ? '' : widget.namaTtd;
+    });
   }
 
   var print = false;
@@ -71,9 +86,11 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
         backgroundColor: const Color(0xFF3AA9D9),
         elevation: 0.8,
         centerTitle: false,
-        title: const Text(
-          "Buat Tanda Tangan Invoice",
-          style: TextStyle(
+        title: Text(
+          widget.namaTtd == 'null'
+              ? "Buat Tanda Tangan Invoice"
+              : "Edit Tanda Tangan Invoice",
+          style: const TextStyle(
             fontSize: 17,
           ),
         ),
@@ -169,26 +186,49 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
                               SnackbarWidget().snackbarError(
                                   "Silahkan Tambah Tanda Tangan Terlebih dahulu");
                             } else {
-                              SignatureInvoiceOnlyController().addInvoceOnly(
-                                widget.nomorInvoiceC,
-                                widget.tanggal_invoiceC,
-                                widget.tandaPenerimaC == ''
-                                    ? 'null'
-                                    : widget.tandaPenerimaC,
-                                widget.keteranganC,
-                                widget.periodePembayaranC,
-                                '${widget.totalPembayaranC.replaceAll(',', '')}',
-                                widget.metodePembayaranC,
-                                widget.namaBankC,
-                                widget.no_rekeningC,
-                                widget.a_n_rekening,
-                                nama_tanda_tanganC.text,
-                                ttd_image!,
-                              );
+                              if (widget.namaTtd == 'null') {
+                                SignatureInvoiceOnlyController().addInvoceOnly(
+                                  widget.nomorInvoiceC,
+                                  widget.tanggal_invoiceC,
+                                  widget.tandaPenerimaC == ''
+                                      ? 'null'
+                                      : widget.tandaPenerimaC,
+                                  widget.keteranganC,
+                                  widget.periodePembayaranC,
+                                  '${widget.totalPembayaranC.replaceAll(',', '')}',
+                                  widget.metodePembayaranC,
+                                  widget.namaBankC,
+                                  widget.no_rekeningC,
+                                  widget.a_n_rekening,
+                                  nama_tanda_tanganC.text,
+                                  ttd_image!,
+                                );
+                              } else {
+                                EditInvoiceOnlyController().editInvoceOnly(
+                                  widget.id,
+                                  widget.nomorInvoiceC,
+                                  widget.tanggal_invoiceC,
+                                  widget.tandaPenerimaC == ''
+                                      ? 'null'
+                                      : widget.tandaPenerimaC,
+                                  widget.keteranganC,
+                                  widget.periodePembayaranC,
+                                  '${widget.totalPembayaranC.replaceAll(',', '')}',
+                                  widget.metodePembayaranC,
+                                  widget.namaBankC,
+                                  widget.no_rekeningC,
+                                  widget.a_n_rekening,
+                                  nama_tanda_tanganC.text,
+                                  widget.fotoTtd,
+                                  ttd_image!,
+                                );
+                              }
                             }
                           }
                         },
-                        child: Text('Simpan', style: TextStyle(fontSize: 13)),
+                        child: Text(
+                            widget.namaTtd == 'null' ? 'Simpan' : 'Edit',
+                            style: TextStyle(fontSize: 13)),
                         style: ButtonStyle(
                           elevation: MaterialStateProperty.all<double>(1),
                           overlayColor: MaterialStateProperty.all(Colors.green),

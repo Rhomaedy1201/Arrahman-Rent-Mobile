@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:transportation_rent_mobile/utils/base_url.dart';
 import 'package:transportation_rent_mobile/view/history/menuHostory.dart';
 import 'package:transportation_rent_mobile/view/page/Invoice_Only/detailDataInvoiceOnly.dart';
+import 'package:transportation_rent_mobile/view/page/homePage.dart';
 
 class HistoryInvoiceOnly extends StatefulWidget {
   const HistoryInvoiceOnly({super.key});
@@ -319,7 +320,7 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
         ),
         leading: IconButton(
           onPressed: () {
-            Get.offAll(const MenuHistory());
+            Get.back(result: HomePage());
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -498,7 +499,7 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
                                           debugPrint("NO INTERNET");
                                         } else {
                                           // to Data Transportation
-                                          Get.offAll(DetailDataInvoiceOnly(
+                                          Get.to(DetailDataInvoiceOnly(
                                             id: item['id'],
                                           ));
                                           search.text = '';

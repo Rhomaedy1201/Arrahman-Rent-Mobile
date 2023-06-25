@@ -44,7 +44,7 @@ class QuotationController extends GetxController {
         if (response.statusCode == 200) {
           SnackbarWidget().snackbarSuccess(response.body['message']);
           var getIdCus = response.body['data'];
-          Get.offAll(DataTransportationPage(
+          Get.off(DataTransportationPage(
             id_customer: getIdCus['id'],
             isBack: 'false',
           ));
@@ -98,7 +98,7 @@ class QuotationController extends GetxController {
         if (response.statusCode == 200) {
           SnackbarWidget().snackbarSuccess("Berhasil Merubah Cutomer");
           var getIdCus = response.body['data'];
-          Get.offAll(
+          Get.off(
               DataTransportationPage(id_customer: idCustomer, isBack: 'false'));
         } else {
           SnackbarWidget().snackbarError(response.body['message']);

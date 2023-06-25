@@ -334,6 +334,180 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
     }
   }
 
+  // PopUp Quotation
+  bool _isPopupVisibleQuotation = false;
+  void _quotationPopUp(
+    // Data Company
+    String logo_company,
+    String alamat_company,
+    String kota_company,
+    String phone_company,
+    String email_company,
+    // yang bertanda tangan
+    String nama_ttd,
+    String img_ttd,
+    // Data customer
+    int id_customer,
+    String kutipan,
+    String tanggal,
+    String nomor_kutipan,
+    String nama_customer,
+    String email_customer,
+    String nama_perusahaan_customer,
+    String alamat_customer,
+    String kota_customer,
+    String kodePos_customer,
+    String phone_customer,
+    String? komenar_customer,
+  ) {
+    setState(() {
+      _isPopupVisibleQuotation = !_isPopupVisibleQuotation;
+    });
+    if (_isPopupVisibleQuotation) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                actions: [
+                  Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 45,
+                        color: const Color(0xFFD0EDF9),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Pilih",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _isPopupVisibleQuotation =
+                                            !_isPopupVisibleQuotation;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                      width: 25,
+                                      height: 25,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFFFFC0C0),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFED6C6C),
+                                ),
+                                onPressed: () {
+                                  QuotationPdf().printPdf(
+                                      logo_company,
+                                      alamat_company,
+                                      kota_company,
+                                      phone_company,
+                                      email_company,
+                                      nama_ttd,
+                                      img_ttd,
+                                      id_customer,
+                                      kutipan,
+                                      tanggal,
+                                      nomor_kutipan,
+                                      nama_customer,
+                                      email_customer,
+                                      nama_perusahaan_customer,
+                                      alamat_customer,
+                                      kota_customer,
+                                      kodePos_customer,
+                                      phone_customer,
+                                      komenar_customer,
+                                      true);
+                                },
+                                label: const Text("Generate Quotation"),
+                                icon: const Icon(Icons.picture_as_pdf),
+                              ),
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFED6C6C),
+                                ),
+                                onPressed: () {
+                                  QuotationPdf().printPdf(
+                                      logo_company,
+                                      alamat_company,
+                                      kota_company,
+                                      phone_company,
+                                      email_company,
+                                      nama_ttd,
+                                      img_ttd,
+                                      id_customer,
+                                      kutipan,
+                                      tanggal,
+                                      nomor_kutipan,
+                                      nama_customer,
+                                      email_customer,
+                                      nama_perusahaan_customer,
+                                      alamat_customer,
+                                      kota_customer,
+                                      kodePos_customer,
+                                      phone_customer,
+                                      komenar_customer,
+                                      false);
+                                },
+                                label: const Text("Share Quotation"),
+                                icon: const Icon(Icons.share),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -343,16 +517,16 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
           "Data Penyewaan",
           style: TextStyle(fontSize: 18),
         ),
-        leading: IconButton(
-          onPressed: () {
-            if (widget.isBack == 'true') {
-              Get.offAll(SearchDataHistory());
-            } else {
-              Get.offAll(HomePage());
-            }
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     if (widget.isBack == 'true') {
+        //       Get.off(SearchDataHistory());
+        //     } else {
+        //       Get.off(HomePage());
+        //     }
+        //   },
+        //   icon: Icon(Icons.arrow_back),
+        // ),
         actions: [
           invoce.isNotEmpty
               ? Container()
@@ -430,7 +604,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                     if (connectivityResult == ConnectivityResult.none) {
                       print("NO INTERNET");
                     } else {
-                      Get.to(AddTransportationPage(
+                      Get.off(AddTransportationPage(
                         id_customer: widget.id_customer,
                       ));
                     }
@@ -466,8 +640,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                   ConnectivityResult.none) {
                                 print("NO INTERNET");
                               } else {
-                                // print Pdf Quotation
-                                QuotationPdf().printPdf(
+                                _quotationPopUp(
                                   // data company/perusahaan
                                   dataCompany['logo'],
                                   dataCompany['alamat'],
@@ -491,6 +664,31 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                   dataQuotation['no_hp'],
                                   dataQuotation['komentar'],
                                 );
+                                // print Pdf Quotation
+                                // QuotationPdf().printPdf(
+                                //   // data company/perusahaan
+                                //   dataCompany['logo'],
+                                //   dataCompany['alamat'],
+                                //   dataCompany['kota'],
+                                //   dataCompany['no_hp'],
+                                //   dataCompany['email'],
+                                //   // orang yang bertanda tangan
+                                //   dataQuotation['nama_lengkap'],
+                                //   dataQuotation['tanda_tangan'],
+                                //   // data customer
+                                //   widget.id_customer,
+                                //   dataQuotation['kutipan_sewa'],
+                                //   dataQuotation['tanggal'],
+                                //   dataQuotation['no_quotation'],
+                                //   dataQuotation['nama_customer'],
+                                //   dataQuotation['email'],
+                                //   dataQuotation['nama_perusahaan'],
+                                //   dataQuotation['nama_jalan'],
+                                //   dataQuotation['kota'],
+                                //   dataQuotation['kode_pos'],
+                                //   dataQuotation['no_hp'],
+                                //   dataQuotation['komentar'],
+                                // );
                               }
                             },
                             child: const Text('Generate Quotation',
@@ -767,7 +965,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                                   children: [
                                                                     Container(
                                                                       width:
-                                                                          200,
+                                                                          170,
                                                                       // color: Colors
                                                                       //     .amber,
                                                                       child:
@@ -813,7 +1011,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                                                                 );
                                                                               },
                                                                               child: Text(
-                                                                                'Edit Transportasi',
+                                                                                'Edit',
                                                                                 style: TextStyle(fontSize: 11),
                                                                               ),
                                                                             ),

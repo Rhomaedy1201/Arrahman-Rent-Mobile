@@ -327,12 +327,12 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
           "History",
           style: TextStyle(fontSize: 18),
         ),
-        leading: IconButton(
-          onPressed: () {
-            Get.offAll(const MenuHistory());
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Get.offAll(const MenuHistory());
+        //   },
+        //   icon: const Icon(Icons.arrow_back),
+        // ),
         foregroundColor: const Color(0xFF686868),
         backgroundColor: Colors.white,
         centerTitle: false,
@@ -509,7 +509,7 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                           debugPrint("NO INTERNET");
                                         } else {
                                           // to Data Transportation
-                                          Get.offAll(
+                                          Get.to(
                                             DataTransportationPage(
                                               id_customer: item['id'],
                                               isBack: 'true',

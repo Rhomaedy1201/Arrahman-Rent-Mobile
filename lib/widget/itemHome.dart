@@ -130,7 +130,9 @@ class ItemHome {
         if (connectivityResult == ConnectivityResult.none) {
           print("NO INTERNET");
         } else {
-          Get.to(const AddDataInvoiceOnly());
+          Get.to(AddDataInvoiceOnly(
+            idInvoiceOnly: 0,
+          ));
         }
       },
       child: Container(
@@ -188,7 +190,7 @@ class ItemHome {
         if (connectivityResult == ConnectivityResult.none) {
           debugPrint("NO INTERNET");
         } else {
-          Get.offAll(const MenuHistory());
+          Get.to(const MenuHistory());
         }
       },
       child: Container(

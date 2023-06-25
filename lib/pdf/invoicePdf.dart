@@ -194,8 +194,8 @@ class InvoicePdf {
             ),
             child: pw.Padding(
               padding: const pw.EdgeInsets.all(10),
-              child:
-                  pw.Text("${ConvertNumberToLatters().numberToLetters(total)}"),
+              child: pw.Text(
+                  "${ConvertNumberToLatters().numberToLetters(total)} rupiah"),
             )),
       ],
     );

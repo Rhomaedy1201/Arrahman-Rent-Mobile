@@ -36,7 +36,7 @@ class MenuHistory extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.offAll(const SearchDataHistory());
+                  Get.to(const SearchDataHistory());
                 },
                 child: const Text("History Quotation & Invoce"),
               ),
@@ -45,7 +45,7 @@ class MenuHistory extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.offAll(const HistoryInvoiceOnly());
+                  Get.to(const HistoryInvoiceOnly());
                 },
                 child: const Text("History Invoce"),
               ),

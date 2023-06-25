@@ -5,14 +5,15 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:transportation_rent_mobile/utils/base_url.dart';
-import 'package:transportation_rent_mobile/view/history/historyInvoiceOnly.dart';
+import 'package:transportation_rent_mobile/view/page/Invoice_Only/detailDataInvoiceOnly.dart';
 import 'package:transportation_rent_mobile/widget/snackbarWidget.dart';
 
-class SignatureInvoiceOnlyController {
+class EditInvoiceOnlyController {
   Rxn<File> imageFile = Rxn<File>();
-  String url = "$baseUrl/invoce-only/create";
+  String url = "$baseUrl/edit-invoice-only";
 
-  Future<void> addInvoceOnly(
+  Future<void> editInvoceOnly(
+    int id,
     String nomor_invoice,
     String tanggal_invoice,
     String tanda_penerima_pembayaran,
@@ -24,12 +25,13 @@ class SignatureInvoiceOnlyController {
     String no_rekening,
     String a_n_rekening,
     String nama_tanda_tangan,
+    String img_tanda_tangan,
     List<int> tanda_tangan,
   ) async {
     try {
       File imageFile = await _convertBytesToFile(tanda_tangan);
       // Make API post request
-      var request = http.MultipartRequest('POST', Uri.parse(url));
+      var request = http.MultipartRequest('POST', Uri.parse('$url/$id'));
       request.fields['nomor_invoice'] = nomor_invoice;
       request.fields['tanggal_invoice'] = tanggal_invoice;
       request.fields['tanda_penerima_pembayaran'] = tanda_penerima_pembayaran;
@@ -41,16 +43,17 @@ class SignatureInvoiceOnlyController {
       request.fields['no_rekening'] = no_rekening;
       request.fields['a_n_rekening'] = a_n_rekening;
       request.fields['nama_tanda_tangan'] = nama_tanda_tangan;
+      request.fields['img_tanda_tangan'] = img_tanda_tangan;
       request.headers['Accept'] = "application/json";
-      request.files.add(await http.MultipartFile.fromPath(
-          'img_tanda_tangan', imageFile.path));
+      request.files
+          .add(await http.MultipartFile.fromPath('new_ttd', imageFile.path));
 
       var response = await request.send();
       String responseString = await response.stream.bytesToString();
       var responseBody = json.decode(responseString);
       if (response.statusCode == 200) {
-        SnackbarWidget().snackbarSuccess("Berhasil Menambahkan Invoce");
-        Get.off(HistoryInvoiceOnly());
+        SnackbarWidget().snackbarSuccess("Berhasil Merubah Data Invoice");
+        Get.off(DetailDataInvoiceOnly(id: id));
         print(responseString);
       } else {
         SnackbarWidget().snackbarError(responseBody['message']);

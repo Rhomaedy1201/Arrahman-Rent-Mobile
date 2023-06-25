@@ -27,7 +27,7 @@ class TransportationController {
           .then((response) {
         if (response.statusCode == 200) {
           SnackbarWidget().snackbarSuccess(response.body['message']);
-          Get.offAll(DataTransportationPage(
+          Get.off(DataTransportationPage(
             id_customer: id_customer,
             isBack: 'false',
           ));
@@ -66,7 +66,7 @@ class TransportationController {
           .then((response) {
         if (response.statusCode == 200) {
           SnackbarWidget().snackbarSuccess("Berhasil Merubah Transportasi");
-          Get.offAll(DataTransportationPage(
+          Get.off(DataTransportationPage(
             id_customer: id_customer,
             isBack: 'false',
           ));

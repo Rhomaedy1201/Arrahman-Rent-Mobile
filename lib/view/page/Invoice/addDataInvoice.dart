@@ -190,7 +190,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                 // Tanda Terima Pembayaran
                 const SizedBox(height: 5),
                 const Text(
-                  "Tanda Terima Pembayaran",
+                  "Telah Terima Dari",
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 5),
@@ -201,7 +201,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                     style: const TextStyle(color: Color(0xFF616161)),
                     cursorColor: const Color(0xFF737373),
                     decoration: const InputDecoration(
-                      hintText: 'Tanda Terima Pembayaran',
+                      hintText: 'Telah Terima Dari',
                       hintStyle:
                           TextStyle(color: Color(0xFF8F8F8F), fontSize: 13),
                       focusedBorder: OutlineInputBorder(
