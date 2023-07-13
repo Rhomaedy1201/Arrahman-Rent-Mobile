@@ -42,10 +42,11 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
   List<dynamic> filteredList = [];
 
   void getCustomer() async {
-    if (mounted)
+    if (mounted) {
       setState(() {
         isLoading = true;
       });
+    }
 
     String url = "$baseUrl/customer";
     String urlFilter =
@@ -63,21 +64,23 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
         print(response.body);
       }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           server = e.toString();
         });
+      }
       print("Server $server");
     }
     // print(dataCustomer['id']);
-    if (mounted)
+    if (mounted) {
       setState(() {
         isLoading = false;
       });
+    }
   }
 
   void _filterData(String query) {
-    if (mounted)
+    if (mounted) {
       setState(() {
         filteredList = dataCustomer
                 .where((item) => item['nama_perusahaan']
@@ -97,13 +100,16 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                 .toList();
         // print(filteredList);
       });
+    }
   }
 
   // Filter
   void _togglePopupVisibility() {
-    setState(() {
-      _isPopupVisible = !_isPopupVisible;
-    });
+    if (mounted) {
+      setState(() {
+        _isPopupVisible = !_isPopupVisible;
+      });
+    }
     if (_isPopupVisible) {
       showDialog(
         context: context,
@@ -177,14 +183,16 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                               onTap: () async {
                                 final date = await pickerDate();
                                 if (date == null) return;
-                                setState(() {
-                                  final newDateTime = DateTime(
-                                    date.year,
-                                    date.month,
-                                    date.day,
-                                  );
-                                  dateTime = date;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    final newDateTime = DateTime(
+                                      date.year,
+                                      date.month,
+                                      date.day,
+                                    );
+                                    dateTime = date;
+                                  });
+                                }
                               },
                               child: Container(
                                 width: double.infinity,
@@ -226,14 +234,16 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                               onTap: () async {
                                 final date2 = await pickerDate2();
                                 if (date2 == null) return;
-                                setState(() {
-                                  final newDateTime2 = DateTime(
-                                    date2.year,
-                                    date2.month,
-                                    date2.day,
-                                  );
-                                  dateTime2 = date2;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    final newDateTime2 = DateTime(
+                                      date2.year,
+                                      date2.month,
+                                      date2.day,
+                                    );
+                                    dateTime2 = date2;
+                                  });
+                                }
                               },
                               child: Container(
                                 width: double.infinity,
@@ -283,7 +293,9 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                                         '${dateTime2.year}-${dateTime2.month}-${dateTime2.day}';
                                     getCustomer();
                                     Get.back();
-                                    setState(() {});
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
                                   }
                                 },
                                 child: const Text('Cari'),
@@ -400,9 +412,11 @@ class _SearchDataHistoryState extends State<SearchDataHistory> {
                           child: InkWell(
                             splashColor: Colors.blueAccent,
                             onTap: () {
-                              setState(() {
-                                _togglePopupVisibility();
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _togglePopupVisibility();
+                                });
+                              }
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),

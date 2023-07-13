@@ -61,6 +61,7 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
   );
 
   var print = false;
+  var isLoading = false;
 
   var nama_tanda_tanganC = TextEditingController(text: '');
   @override
@@ -159,7 +160,11 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
                       child: ElevatedButton(
                         onPressed: () async {
                           exportedImage = await _controller.toPngBytes();
-                          setState(() {});
+                          if (mounted) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                          }
                           final connectivityResult =
                               await (Connectivity().checkConnectivity());
                           if (connectivityResult == ConnectivityResult.none) {
@@ -185,13 +190,17 @@ class _SignatureInvocePageState extends State<SignatureInvocePage> {
                                 nama_tanda_tanganC.text,
                                 exportedImage!,
                               );
-                              setState(() {
-                                print = true;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  print = true;
+                                });
+                              }
                             }
                           }
                         },
-                        child: Text('Simpan', style: TextStyle(fontSize: 13)),
+                        child: isLoading == true
+                            ? Text('Loading...', style: TextStyle(fontSize: 13))
+                            : Text('Simpan', style: TextStyle(fontSize: 13)),
                         style: ButtonStyle(
                           elevation: MaterialStateProperty.all<double>(1),
                           overlayColor: MaterialStateProperty.all(Colors.green),

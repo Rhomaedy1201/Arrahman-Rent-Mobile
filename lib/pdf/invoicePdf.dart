@@ -550,7 +550,8 @@ class InvoicePdf {
 
     // Save the PDF to a file
     final output = await getTemporaryDirectory();
-    final filePath1 = '${output.path}/Invoice.pdf';
+    final filePath1 =
+        '${output.path}/Invoice-$keterangan-periode pembayaran $periode_pembayaran.pdf';
     final file = File(filePath1);
     await file.writeAsBytes(await pdf.save());
 

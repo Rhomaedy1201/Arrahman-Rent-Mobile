@@ -404,6 +404,7 @@ class _QuotationPageState extends State<QuotationPage> {
                                   maxLines: 1,
                                   controller: kodePosC,
                                   textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(5),
                                   ],

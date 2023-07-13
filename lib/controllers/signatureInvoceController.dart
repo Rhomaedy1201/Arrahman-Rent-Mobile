@@ -51,7 +51,7 @@ class SignatureInvoceController {
       var responseBody = json.decode(responseString);
       if (response.statusCode == 200) {
         SnackbarWidget().snackbarSuccess("Berhasil Menambahkan Invoce");
-        Get.offAll(
+        Get.off(
           DataTransportationPage(
             id_customer: int.parse(id_customer),
             isBack: 'false',

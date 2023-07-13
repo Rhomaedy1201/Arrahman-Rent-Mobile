@@ -149,9 +149,11 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                                   date.month,
                                   date.day,
                                 );
-                                setState(() {
-                                  dateTime = date;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    dateTime = date;
+                                  });
+                                }
                               },
                               child: Container(
                                 width: double.infinity,
@@ -323,13 +325,15 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                       style: TextStyle(color: Color(0xFF8F8F8F), fontSize: 12),
                     ),
                     onChanged: ((value) {
-                      setState(() {
-                        valuePembayaran = value as String;
-                        print(valuePembayaran);
-                        namaBankC.text = '';
-                        noRekeningC.text = '';
-                        namaRekeningC.text = '';
-                      });
+                      if (mounted) {
+                        setState(() {
+                          valuePembayaran = value as String;
+                          print(valuePembayaran);
+                          namaBankC.text = '';
+                          noRekeningC.text = '';
+                          namaRekeningC.text = '';
+                        });
+                      }
                     }),
                     items: pembayaranList.map((item) {
                       return DropdownMenuItem(
@@ -513,7 +517,7 @@ class _addDataInvoiceState extends State<addDataInvoice> {
                           SnackbarWidget()
                               .snackbarError("Data Tidak boleh kosong");
                         } else {
-                          Get.to(SignatureInvocePage(
+                          Get.off(SignatureInvocePage(
                             alamat_company: widget.alamat_company,
                             kota_company: widget.kota_company,
                             noHp_company: widget.noHp_company,

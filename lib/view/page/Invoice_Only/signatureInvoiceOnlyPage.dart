@@ -70,9 +70,11 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
   }
 
   void setNameFromEdit() {
-    setState(() {
-      nama_tanda_tanganC.text = widget.namaTtd == 'null' ? '' : widget.namaTtd;
-    });
+    if (mounted)
+      setState(() {
+        nama_tanda_tanganC.text =
+            widget.namaTtd == 'null' ? '' : widget.namaTtd;
+      });
   }
 
   var print = false;
@@ -176,7 +178,9 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
                       child: ElevatedButton(
                         onPressed: () async {
                           ttd_image = await _controller.toPngBytes();
-                          setState(() {});
+                          if (mounted) {
+                            setState(() {});
+                          }
                           final connectivityResult =
                               await (Connectivity().checkConnectivity());
                           if (connectivityResult == ConnectivityResult.none) {

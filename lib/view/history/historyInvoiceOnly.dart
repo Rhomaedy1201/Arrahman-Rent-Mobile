@@ -42,10 +42,11 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
   List<dynamic> filteredList = [];
 
   void getInvoceOnly() async {
-    if (mounted)
+    if (mounted) {
       setState(() {
         isLoading = true;
       });
+    }
 
     String url = "$baseUrl/invoce-only";
     String urlFilter =
@@ -63,20 +64,23 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
         print(response.body);
       }
     } catch (e) {
-      setState(() {
-        server = e.toString();
-      });
+      if (mounted) {
+        setState(() {
+          server = e.toString();
+        });
+      }
       print("Server $server");
     }
-    if (mounted)
+    if (mounted) {
       setState(() {
         isLoading = false;
       });
+    }
     // print(dataInvoice['id']);
   }
 
   void _filterData(String query) {
-    if (mounted)
+    if (mounted) {
       setState(() {
         filteredList = dataInvoice
                 .where((item) => item['nomor_invoice']
@@ -96,13 +100,16 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
                 .toList();
         // print(filteredList);
       });
+    }
   }
 
   // Filter
   void _togglePopupVisibility() {
-    setState(() {
-      _isPopupVisible = !_isPopupVisible;
-    });
+    if (mounted) {
+      setState(() {
+        _isPopupVisible = !_isPopupVisible;
+      });
+    }
     if (_isPopupVisible) {
       showDialog(
         context: context,
@@ -176,14 +183,16 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
                               onTap: () async {
                                 final date = await pickerDate();
                                 if (date == null) return;
-                                setState(() {
-                                  final newDateTime = DateTime(
-                                    date.year,
-                                    date.month,
-                                    date.day,
-                                  );
-                                  dateTime = date;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    final newDateTime = DateTime(
+                                      date.year,
+                                      date.month,
+                                      date.day,
+                                    );
+                                    dateTime = date;
+                                  });
+                                }
                               },
                               child: Container(
                                 width: double.infinity,
@@ -225,14 +234,16 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
                               onTap: () async {
                                 final date2 = await pickerDate2();
                                 if (date2 == null) return;
-                                setState(() {
-                                  final newDateTime2 = DateTime(
-                                    date2.year,
-                                    date2.month,
-                                    date2.day,
-                                  );
-                                  dateTime2 = date2;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    final newDateTime2 = DateTime(
+                                      date2.year,
+                                      date2.month,
+                                      date2.day,
+                                    );
+                                    dateTime2 = date2;
+                                  });
+                                }
                               },
                               child: Container(
                                 width: double.infinity,
@@ -282,7 +293,9 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
                                         '${dateTime2.year}-${dateTime2.month}-${dateTime2.day}';
                                     getInvoceOnly();
                                     Get.back();
-                                    setState(() {});
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
                                   }
                                 },
                                 child: const Text('Cari'),
@@ -390,9 +403,11 @@ class _HistoryInvoiceOnlyState extends State<HistoryInvoiceOnly> {
                           child: InkWell(
                             splashColor: Colors.blueAccent,
                             onTap: () {
-                              setState(() {
-                                _togglePopupVisibility();
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _togglePopupVisibility();
+                                });
+                              }
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),

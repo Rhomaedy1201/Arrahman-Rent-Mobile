@@ -52,10 +52,11 @@ class _AddDataInvoiceOnlyState extends State<AddDataInvoiceOnly> {
   bool isLoading = false;
   List<dynamic> dataInvoice = [];
   void getInvoiceOnly(int id) async {
-    if (mounted)
+    if (mounted) {
       setState(() {
         isLoading = true;
       });
+    }
 
     // get invoice only
     String url = "$baseUrl/invoce-only/$id";
@@ -74,10 +75,11 @@ class _AddDataInvoiceOnlyState extends State<AddDataInvoiceOnly> {
       print("Server");
     }
 
-    if (mounted)
+    if (mounted) {
       setState(() {
         isLoading = false;
       });
+    }
   }
 
   void setEdit() {
@@ -217,9 +219,11 @@ class _AddDataInvoiceOnlyState extends State<AddDataInvoiceOnly> {
                                         date.month,
                                         date.day,
                                       );
-                                      setState(() {
-                                        dateTime = date;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          dateTime = date;
+                                        });
+                                      }
                                     },
                                     child: Container(
                                       width: double.infinity,
@@ -449,13 +453,15 @@ class _AddDataInvoiceOnlyState extends State<AddDataInvoiceOnly> {
                                 color: Color(0xFF8F8F8F), fontSize: 12),
                           ),
                           onChanged: ((value) {
-                            setState(() {
-                              valuePembayaran = value as String;
-                              print(valuePembayaran);
-                              namaBankC.text = '';
-                              noRekeningC.text = '';
-                              namaRekeningC.text = '';
-                            });
+                            if (mounted) {
+                              setState(() {
+                                valuePembayaran = value as String;
+                                print(valuePembayaran);
+                                namaBankC.text = '';
+                                noRekeningC.text = '';
+                                namaRekeningC.text = '';
+                              });
+                            }
                           }),
                           items: pembayaranList.map((item) {
                             return DropdownMenuItem(
@@ -668,10 +674,10 @@ class _AddDataInvoiceOnlyState extends State<AddDataInvoiceOnly> {
                                     no_rekeningC: noRekeningC.text,
                                     a_n_rekening: namaRekeningC.text,
                                     namaTtd: widget.idInvoiceOnly == 0
-                                        ? null
+                                        ? 'null'
                                         : dataInvoice[0]['nama_tanda_tangan'],
                                     fotoTtd: widget.idInvoiceOnly == 0
-                                        ? null
+                                        ? 'null'
                                         : dataInvoice[0]['img_tanda_tangan'],
                                   ),
                                 );

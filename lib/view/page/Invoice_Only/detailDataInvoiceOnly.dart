@@ -100,9 +100,11 @@ class _DetailDataInvoiceOnlyState extends State<DetailDataInvoiceOnly> {
     String nama_tanda_tangan,
     int subTotalRp,
   ) {
-    setState(() {
-      _isPopupVisible = !_isPopupVisible;
-    });
+    if (mounted) {
+      setState(() {
+        _isPopupVisible = !_isPopupVisible;
+      });
+    }
     if (_isPopupVisible) {
       showDialog(
         context: context,
@@ -138,9 +140,11 @@ class _DetailDataInvoiceOnlyState extends State<DetailDataInvoiceOnly> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      setState(() {
-                                        _isPopupVisible = !_isPopupVisible;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          _isPopupVisible = !_isPopupVisible;
+                                        });
+                                      }
                                       Navigator.of(context).pop();
                                     },
                                     child: Container(
@@ -195,9 +199,11 @@ class _DetailDataInvoiceOnlyState extends State<DetailDataInvoiceOnly> {
                                     subTotalRp,
                                     true,
                                   );
-                                  setState(() {
-                                    _isPopupVisible = !_isPopupVisible;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      _isPopupVisible = !_isPopupVisible;
+                                    });
+                                  }
                                   Get.back();
                                 },
                                 label: const Text("Generate Invoice"),
@@ -232,9 +238,11 @@ class _DetailDataInvoiceOnlyState extends State<DetailDataInvoiceOnly> {
                                     subTotalRp,
                                     false,
                                   );
-                                  setState(() {
-                                    _isPopupVisible = !_isPopupVisible;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      _isPopupVisible = !_isPopupVisible;
+                                    });
+                                  }
                                   Get.back();
                                 },
                                 label: const Text("Share Invoice"),

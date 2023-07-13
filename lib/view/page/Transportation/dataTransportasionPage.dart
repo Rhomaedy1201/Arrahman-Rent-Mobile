@@ -745,7 +745,7 @@ class _DataTransportationPageState extends State<DataTransportationPage> {
                                     subTotalRp,
                                   );
                                 } else {
-                                  Get.to(addDataInvoice(
+                                  Get.off(addDataInvoice(
                                     alamat_company: dataCompany['alamat'],
                                     kota_company: dataCompany['kota'],
                                     noHp_company: dataCompany['no_hp'],
