@@ -47,6 +47,7 @@ class SignatureInvoiceOnlyPage extends StatefulWidget {
 
 class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
   Uint8List? ttd_image;
+  var isLoading = false;
 
   SignatureController _controller = SignatureController(
     penStrokeWidth: 2,
@@ -179,7 +180,9 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
                         onPressed: () async {
                           ttd_image = await _controller.toPngBytes();
                           if (mounted) {
-                            setState(() {});
+                            setState(() {
+                              isLoading = true;
+                            });
                           }
                           final connectivityResult =
                               await (Connectivity().checkConnectivity());
@@ -230,9 +233,14 @@ class _SignatureInvoiceOnlyPageState extends State<SignatureInvoiceOnlyPage> {
                             }
                           }
                         },
-                        child: Text(
-                            widget.namaTtd == 'null' ? 'Simpan' : 'Edit',
-                            style: TextStyle(fontSize: 13)),
+                        child: isLoading
+                            ? Text(
+                                widget.namaTtd == 'null'
+                                    ? 'Loading...'
+                                    : 'Loading...',
+                                style: TextStyle(fontSize: 13))
+                            : Text(widget.namaTtd == 'null' ? 'Simpan' : 'Edit',
+                                style: TextStyle(fontSize: 13)),
                         style: ButtonStyle(
                           elevation: MaterialStateProperty.all<double>(1),
                           overlayColor: MaterialStateProperty.all(Colors.green),
